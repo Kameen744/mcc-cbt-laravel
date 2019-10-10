@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use Auth;
-use App\admin;
+use App\Admin;
 use App\Navbar;
 use App\NavGroup;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -21,26 +22,8 @@ class AdminController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {  
-        // $aut = authadm::admin()
-        // $admin = [
-        //     'name' => Auth::guard('admin')->user()->username, 
-        //     'id' => Auth::guard('admin')->user()->id,
-        //     'createdAt' => Auth::guard('admin')->user()->created_at,
-        //     'updatedAt' => Auth::guard('admin')->user()->updated_at,
-        // ];
-        
+    {   
         return view('admins.dashboard');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -51,7 +34,14 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $this->validate($request, [
+            'username' => 'required',
+            'password' => 'required'
+        ]);
+        $data['password'] =  Hash::make($request->password);
+
+        Admin::create($data);
+        return $this->get_admins();
     }
 
     /**
@@ -62,18 +52,7 @@ class AdminController extends Controller
      */
     public function show(admin $admin)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\admin  $admin
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(admin $admin)
-    {
-        //
+       return $admin;
     }
 
     /**
@@ -85,7 +64,14 @@ class AdminController extends Controller
      */
     public function update(Request $request, admin $admin)
     {
-        //
+        $data = $this->validate($request, [
+            'username' => 'required',
+            'password' => 'required'
+        ]);
+        $data['password'] =  Hash::make($request->password);
+        
+        $admin->update($data);
+        return $this->get_admins();
     }
 
     /**
@@ -96,10 +82,14 @@ class AdminController extends Controller
      */
     public function destroy(admin $admin)
     {
-        //
+        $admin->delete();
+        return $this->get_admins();
     }
 
-//  return json data for vue js
+    public function get_admins()
+    {
+        return Admin::all();
+    }
 
     public function navbargroup(Navbar $navbar) {
         return NavGroup::all();
@@ -108,6 +98,32 @@ class AdminController extends Controller
     public function navbars()
     {
         return Admin::find($this::admin('id'))->navbar->all();
+    }
+
+    public function permited_navbars(Admin $admin)
+    {
+        return $admin->navbar->all();
+    }
+
+    public function add_permission(Request $request, Admin $admin) 
+    {
+        $data = $this->validate($request, [
+            'admin_id' => 'required',
+            'navbar_id' => 'required'
+        ]);
+
+        $admin->navbar()->syncWithoutDetaching($data['navbar_id']);
+        return $admin->navbar->all();
+    }
+
+    public function delete_permission (Request $request, Admin $admin)
+    {
+        $data = $this->validate($request, [
+            'admin_id' => 'required',
+            'navbar_id' => 'required'
+        ]);
+        $admin->navbar()->Detach($data['navbar_id']);
+        return $admin->navbar->all();
     }
 
     private function admin($name)

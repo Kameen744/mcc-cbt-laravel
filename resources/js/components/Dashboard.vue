@@ -42,12 +42,10 @@
             <hr class="sidebar-divider">
             
             <div v-for="(group, key) in navGroups" :key="group.id">
-                <!-- Heading -->
                 <div class="sidebar-heading">
                     Manage {{group.name}}
                 </div>
 
-                <!-- Nav Item - Pages Collapse Menu -->
                 <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" :data-target="`#collapse${key}`" aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-tasks"></i>

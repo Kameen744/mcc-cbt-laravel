@@ -9,9 +9,15 @@ window._ = require('lodash');
 try {
     window.Popper = require('popper.js').default;
     window.$ = window.jQuery = require('jquery');
+    require('startbootstrap-sb-admin-2/vendor/jquery-easing/jquery.easing');
 
     require('bootstrap');
     require('startbootstrap-sb-admin-2/js/sb-admin-2');
+    // require('startbootstrap-sb-admin-2/vendor/datatables/jquery.dataTables');
+    require('startbootstrap-sb-admin-2/vendor/datatables/dataTables.bootstrap4');
+    
+    // require('startbootstrap-sb-admin-2/js/demo/datatables-demo');
+  
     // require('bootstrap');
     // require('startbootstrap-sb-admin-2'); 
 } catch (e) {}

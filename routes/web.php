@@ -18,19 +18,19 @@
 // admin routes
 
 Route::get('admin', 'AdminController@index')->name('admin.dashboard');
+Route::post('admin', 'AdminController@store');
+Route::put('admin/{admin}', 'AdminController@update');
+Route::delete('admin/{admin}', 'AdminController@destroy');
+Route::get('get_admin/{admin}', 'AdminController@show');
+Route::get('get_admins', 'AdminController@get_admins');
+Route::post('add_permission/{admin}', 'AdminController@add_permission');
+Route::delete('delete_permission/{admin}', 'AdminController@delete_permission');
 Route::get('admin/navbars', 'AdminController@navbars');
+Route::get('admin/permited_navbars/{admin}', 'AdminController@permited_navbars');
 Route::get('admin/navbargroup', 'AdminController@navbargroup');
 Route::get('admin/login', 'Auth\AdminLoginController@ShowLoginForm')->name('admin.login');
 Route::post('admin/login', 'Auth\AdminLoginController@login')->name('admin.login.attempt');
 Route::get('admin/logout', 'Auth\AdminLoginController@logout')->name('admin.logout');
-
-// departments
-
-// Route::get('admin/department', 'DepartmentController@index');
-// Route::post('admin/department', 'DepartmentController@store');
-// Route::get('admin/department/{department}', 'DepartmentController@show');
-// Route::get('admin/department/{department}/edit', 'DepartmentController@edit');
-// Route::get('admin/department/')
 
 // --------Departments-----------
 Route::get('department/exam/{department}', 'DepartmentController@exam')->middleware('authadm:admin');;
@@ -52,12 +52,17 @@ Route::get('exam/{exam}/{course}', 'ExamController@course');
 Route::resource('exam', 'ExamController', ['except' => ['edit', 'create']]);
 
 // --------Students-----------
-Route::get('/', 'Auth\StudentsLoginController@ShowLoginForm')->name('student');
+Route::get('/', 'HomeController@index');
+// Route::get('/', 'Auth\StudentsLoginController@ShowLoginForm')->name('student');
 Route::get('student', 'StudentController@index')->name('student.dashboard');
 Route::post('student/login', 'Auth\StudentsLoginController@login')->name('student.login');
 Route::get('student/logout', 'Auth\StudentsLoginController@logout')->name('student.logout');
 
+// ------------ Library ------------- 
+Route::get('library', 'Library\HomeController@index')->name('lib.home');
+Route::get('library/admin', 'Library\Admin\HomeController@index')->name('lib.admin.dashboard');
+Route::get('library/admin/login', 'Library\Admin\LoginController@showLoginForm')->name('lib.admin.loginform');
+Route::post('library/admin/login', 'Library\Admin\LoginController@login')->name('lib.admin.login');
 
 // Auth::routes();
-
 // Route::get('/home', 'HomeController@index')->name('home');

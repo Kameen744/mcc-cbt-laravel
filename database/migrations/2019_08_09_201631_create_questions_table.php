@@ -17,6 +17,8 @@ class CreateQuestionsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('course_id');
             $table->unsignedBigInteger('section_id');
+            // $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
+            // $table->foreign('section_id')->references('id')->on('course_sections')->onDelete('cascade');
             $table->text('question');
             $table->string('option_a');
             $table->string('option_b');

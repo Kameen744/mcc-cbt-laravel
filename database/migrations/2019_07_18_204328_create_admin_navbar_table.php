@@ -17,6 +17,8 @@ class CreateAdminNavbarTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('admin_id');
             $table->unsignedBigInteger('navbar_id');
+            // $table->foreign('admin_id')->references('id')->on('admins')->onDelete('cascade');
+            // $table->foreign('navbar_id')->references('id')->on('navbars')->onDelete('cascade');
             $table->timestamps();
         });
     }

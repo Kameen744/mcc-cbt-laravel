@@ -17,6 +17,8 @@ class CreateExamsCoursesTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('exam_id');
             $table->unsignedBigInteger('course_id');
+            // $table->foreign('exam_id')->references('id')->on('exams')->onDelete('cascade');
+            // $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -387,7 +387,7 @@ export default {
 }
 </script>
 <style>
- table {
+ /* table {
         color:white !important;
     }
     th {
@@ -400,7 +400,7 @@ export default {
     th,td {
         padding-top: 2px;
         padding-bottom: 2px;
-    }
+    } */
     /* label, select, input {
         color: black !important;
     } */

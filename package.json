@@ -29,6 +29,7 @@
         "moment": "^2.24.0",
         "startbootstrap-sb-admin-2": "^4.0.6",
         "sweetalert2": "^8.15.2",
+        "v-datatable-light": "^0.8.0",
         "vform": "^1.0.1",
         "vue-progressbar": "^0.7.5",
         "vue-router": "^3.0.7",

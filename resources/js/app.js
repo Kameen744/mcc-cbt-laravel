@@ -7,12 +7,15 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+
 import { Form, HasError, AlertError} from 'vform';
 import moment from 'moment';
 import VueProgressBar from 'vue-progressbar';
 import Swal from 'sweetalert2';
 import VueEditor from 'vue2-editor';
 import objectToFormData from './objectodata';
+// import { DataTable } from 'v-datatable-light'
+// import Datatable from 'vue2-datatable-component'
 
 window.Form = Form;
 window.Swal = Swal;
@@ -25,6 +28,8 @@ import Dashboard from './components/Dashboard.vue';
 import Settings from './components/Settings.vue';
 import NavbarSide from './components/nav/NavbarSide.vue';
 import NavbarTop from './components/nav/NavbarTop.vue';
+
+// import DataTableExample from './components/nav/DataTableExample.vue';
 
 import Department from './components/nav-pages/Department.vue';
 import Courses from './components/nav-pages/Courses.vue';
@@ -50,6 +55,7 @@ Vue.use(VueEditor);
     showConfirmButton: false,
     timer: 3000
 });
+// Vue.use(Datatable);
 Vue.filter('upText', function(text) {
     return text.charAt(0).toUpperCase() + text.slice(1);
 });
@@ -94,6 +100,9 @@ window.Toast = Toast;
 Vue.component('navbar-side', NavbarSide);
 Vue.component('navbar-top', NavbarTop);
 
+// Vue.component('DataTable', DataTable);
+// Vue.component('DataTableExample', DataTableExample);
+
 Vue.component('departments', Department);
 Vue.component('courses', Courses);
 Vue.component('section-questions', SectionQuestions);
@@ -107,7 +116,7 @@ Vue.component('settings', Settings);
 // Vue.component('admin-dashbaord', require('./components/Dashboard.vue').default);
 // Vue.component('departments', require('./components/nav-pages/Department.vue').default);
 
-const app = new Vue({
+var app = new Vue({
     el: '.vue-app',
     // router,
 });

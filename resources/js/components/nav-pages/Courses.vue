@@ -113,7 +113,7 @@ export default {
         },
         editCourse() {
             this.$Progress.start();
-                this.form.put('/course/' + this.form.id)
+                this.form.put(`course/${this.form.id}`)
                 .then(res => {
                     this.courses = res.data;
                     $('#courseModal').modal('hide');
@@ -167,7 +167,7 @@ export default {
 }
 </script>
 <style scoped>
-    table {
+    /* table {
         color:white !important;
     }
     th {
@@ -177,5 +177,5 @@ export default {
     th,td {
         padding-top: 2px;
         padding-bottom: 2px;
-    }
+    } */
 </style>

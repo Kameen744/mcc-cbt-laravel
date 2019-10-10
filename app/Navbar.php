@@ -19,4 +19,9 @@ class Navbar extends Model
     {
         return $this->belongsTo(NavGroup::class);
     }
+
+    public function create_default()
+    {
+        
+    }
 }

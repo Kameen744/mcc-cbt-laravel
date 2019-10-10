@@ -214,7 +214,7 @@ export default {
 </script>
 
 <style scoped>
-    table {
+    /* table {
         color:white !important;
     }
     th {
@@ -224,5 +224,5 @@ export default {
     th,td {
         padding-top: 2px;
         padding-bottom: 2px;
-    }
+    } */
 </style>
