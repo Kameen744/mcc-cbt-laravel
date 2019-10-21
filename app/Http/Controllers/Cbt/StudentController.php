@@ -1,16 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Library\Admin;
+namespace App\Http\Controllers\Cbt;
 
-use Auth;
+use App\Cbt\student;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class HomeController extends Controller
+class StudentController extends Controller
 {
-    public function __construct() 
+    public function __construct()
     {
-        $this->middleware('authlibadm:libadmin');
+        $this->middleware('authstu:student'); 
+        // ? : $this->middleware('authadm:admin');
     }
     /**
      * Display a listing of the resource.
@@ -19,7 +20,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('library.admin.dashboard');
+        return view('students.dashboard');
     }
 
     /**
@@ -46,10 +47,10 @@ class HomeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\student  $student
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(student $student)
     {
         //
     }
@@ -57,10 +58,10 @@ class HomeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\student  $student
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(student $student)
     {
         //
     }
@@ -69,10 +70,10 @@ class HomeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\student  $student
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, student $student)
     {
         //
     }
@@ -80,10 +81,10 @@ class HomeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\student  $student
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(student $student)
     {
         //
     }

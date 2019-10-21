@@ -93,7 +93,7 @@ return [
         ],
         'admins' => [
             'driver' => 'eloquent',
-            'model' => App\Admin::class,
+            'model' => App\Cbt\Admin::class,
         ],
         'libadmins' => [
             'driver' => 'eloquent',

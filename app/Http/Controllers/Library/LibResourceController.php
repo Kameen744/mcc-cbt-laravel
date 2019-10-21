@@ -1,17 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Library\Admin;
+namespace App\Http\Controllers\Library;
 
-use Auth;
+use App\Cbt\Department;
+use App\Library\LibResource;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class HomeController extends Controller
+class LibResourceController extends Controller
 {
-    public function __construct() 
-    {
-        $this->middleware('authlibadm:libadmin');
-    }
     /**
      * Display a listing of the resource.
      *
@@ -19,7 +16,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('library.admin.dashboard');
+        //
     }
 
     /**
@@ -46,10 +43,10 @@ class HomeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Library\LibResource  $libResource
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(LibResource $libResource)
     {
         //
     }
@@ -57,10 +54,10 @@ class HomeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Library\LibResource  $libResource
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(LibResource $libResource)
     {
         //
     }
@@ -69,10 +66,10 @@ class HomeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Library\LibResource  $libResource
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, LibResource $libResource)
     {
         //
     }
@@ -80,11 +77,16 @@ class HomeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Library\LibResource  $libResource
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(LibResource $libResource)
     {
         //
+    }
+
+    public function res_department()
+    {
+        return Department::all();
     }
 }

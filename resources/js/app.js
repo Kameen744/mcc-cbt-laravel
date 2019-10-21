@@ -14,31 +14,39 @@ import VueProgressBar from 'vue-progressbar';
 import Swal from 'sweetalert2';
 import VueEditor from 'vue2-editor';
 import objectToFormData from './objectodata';
+import DataTable from 'laravel-vue-datatable';
 // import { DataTable } from 'v-datatable-light'
 // import Datatable from 'vue2-datatable-component'
 
 window.Form = Form;
 window.Swal = Swal;
 window.objectToFormData = objectToFormData;
-// import VueRouter from 'vue-router';
-// Vue.use(VueRouter);
+import VueRouter from 'vue-router';
+Vue.use(VueRouter);
 
-// components
-import Dashboard from './components/Dashboard.vue';
+// Layouts
 import Settings from './components/Settings.vue';
-import NavbarSide from './components/nav/NavbarSide.vue';
 import NavbarTop from './components/nav/NavbarTop.vue';
+import DataButtonVue from './components/cbt/DataButton.vue';
 
-// import DataTableExample from './components/nav/DataTableExample.vue';
+// CBT
+import Dashboard from './components/cbt/admin/Dashboard.vue';
+import NavbarSide from './components/cbt/admin/NavbarSide.vue';
+import Department from './components/cbt/admin/nav-pages/Department.vue';
+import Courses from './components/cbt/admin/nav-pages/Courses.vue';
+import SectionQuestions from './components/cbt/admin/nav-pages/SectionQuestions.vue';
+import ExamQuestions from './components/cbt/admin/nav-pages/ExamQuestions.vue';
+import CreateExam from './components/cbt/admin/nav-pages/CreateExam.vue';
+import CreateStaff from './components/cbt/admin/nav-pages/CreateStaff.vue';
+import StaffPermission from './components/cbt/admin/nav-pages/StaffPermission.vue';
+import UploadStudents from './components/cbt/admin/nav-pages/UploadStudents.vue';
 
-import Department from './components/nav-pages/Department.vue';
-import Courses from './components/nav-pages/Courses.vue';
-import SectionQuestions from './components/nav-pages/SectionQuestions.vue';
-import ExamQuestions from './components/nav-pages/ExamQuestions.vue';
-import CreateExam from './components/nav-pages/CreateExam.vue';
-import CreateStaff from './components/nav-pages/CreateStaff.vue';
-import StaffPermission from './components/nav-pages/StaffPermission.vue';
-import UploadStudents from './components/nav-pages/UploadStudents.vue';
+// Library 
+import LibDashboard from './components/library/admin/Dashboard.vue';
+import LibNavbarSide from './components/library/admin/NavbarSide.vue';
+import LibUploadNewbook from './components/library/admin/UploadNewbook.vue';
+import Resources from './components/library/admin/Resources.vue';
+import ResourceType from './components/library/admin/ResourceType.vue';
 
 Vue.component(HasError.name, HasError)
 Vue.component(AlertError.name, AlertError)
@@ -48,6 +56,7 @@ Vue.use(VueProgressBar, {
     failedColor: '#810412',
     thickness: '5px' 
 });
+Vue.use(DataTable);
 Vue.use(VueEditor);
     const Toast = Swal.mixin({
     toast: true,
@@ -67,21 +76,27 @@ Vue.filter('myTime', function(created) {
 });
 
 window.Toast = Toast;
+window.DataButtonVue = DataButtonVue;
 
-// const routes = [
-//     {path: '/departments', component: Department},
-//     {path: '/courses', component: Courses},
-//     {path: '/section-questions', component: SectionQuestions},
-//     {path: '/exam-questions', component: ExamQuestions},
-//     {path: '/create-exam', component: CreateExam},
-//     {path: '/create-staff', component: CreateStaff},
-//     {path: '/staff-permission', component: StaffPermission},
-//     {path: '/upload-students', component: UploadStudents}
-// ];
+const routes = [
+    {path: '/departments', component: Department},
+    {path: '/courses', component: Courses},
+    {path: '/section-questions', component: SectionQuestions},
+    {path: '/exam-questions', component: ExamQuestions},
+    {path: '/create-exam', component: CreateExam},
+    {path: '/create-staff', component: CreateStaff},
+    {path: '/staff-permission', component: StaffPermission},
+    {path: '/upload-students', component: UploadStudents},
+    // library
+    // {path: '/libadmin-dashbaord', component: LibDashboard},
+    {path: '/upload-newbook', component: LibUploadNewbook},
+    {path: '/lib-resources', component: Resources},
+    {path: '/resource-type', component: ResourceType},
+];
 
-// const router = new VueRouter({
-//     routes
-// });
+const router = new VueRouter({
+    routes
+});
 
 /**
  * The following block of code may be used to automatically register your
@@ -97,26 +112,32 @@ window.Toast = Toast;
 // Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 // Vue.component('admin-dashbaord', Dashboard.default);
 
-Vue.component('navbar-side', NavbarSide);
-Vue.component('navbar-top', NavbarTop);
-
 // Vue.component('DataTable', DataTable);
 // Vue.component('DataTableExample', DataTableExample);
 
-Vue.component('departments', Department);
-Vue.component('courses', Courses);
-Vue.component('section-questions', SectionQuestions);
-Vue.component('exam-questions', ExamQuestions);
-Vue.component('create-exam', CreateExam);
-Vue.component('create-staff', CreateStaff);
-Vue.component('staff-permission', StaffPermission);
-Vue.component('upload-students', UploadStudents);
-Vue.component('admin-dashbaord', Dashboard);
+// Vue.component('departments', Department);
+// Vue.component('courses', Courses);
+// Vue.component('section-questions', SectionQuestions);
+// Vue.component('exam-questions', ExamQuestions);
+// Vue.component('create-exam', CreateExam);
+// Vue.component('create-staff', CreateStaff);
+// Vue.component('staff-permission', StaffPermission);
+// Vue.component('upload-students', UploadStudents);
+
+Vue.component('navbar-side', NavbarSide);
+Vue.component('navbar-top', NavbarTop);
+Vue.component('admin-dashbaord', Dashboard); 
 Vue.component('settings', Settings);
+
+// Library 
+Vue.component('libadmin-dashbaord', LibDashboard);
+Vue.component('libadmin-navbarside', LibNavbarSide);
+// Vue.component('upload-newbook', LibUploadNewbook);
+
 // Vue.component('admin-dashbaord', require('./components/Dashboard.vue').default);
 // Vue.component('departments', require('./components/nav-pages/Department.vue').default);
 
 var app = new Vue({
     el: '.vue-app',
-    // router,
+    router,
 });

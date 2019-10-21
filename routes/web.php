@@ -15,54 +15,123 @@
 //     return view('welcome');
 // });
 
-// admin routes
+// CBT admin routes
+Route::get('cbt/admin',                             
+'Cbt\AdminController@index')->name('admin.dashboard');
 
-Route::get('admin', 'AdminController@index')->name('admin.dashboard');
-Route::post('admin', 'AdminController@store');
-Route::put('admin/{admin}', 'AdminController@update');
-Route::delete('admin/{admin}', 'AdminController@destroy');
-Route::get('get_admin/{admin}', 'AdminController@show');
-Route::get('get_admins', 'AdminController@get_admins');
-Route::post('add_permission/{admin}', 'AdminController@add_permission');
-Route::delete('delete_permission/{admin}', 'AdminController@delete_permission');
-Route::get('admin/navbars', 'AdminController@navbars');
-Route::get('admin/permited_navbars/{admin}', 'AdminController@permited_navbars');
-Route::get('admin/navbargroup', 'AdminController@navbargroup');
-Route::get('admin/login', 'Auth\AdminLoginController@ShowLoginForm')->name('admin.login');
-Route::post('admin/login', 'Auth\AdminLoginController@login')->name('admin.login.attempt');
-Route::get('admin/logout', 'Auth\AdminLoginController@logout')->name('admin.logout');
+Route::post('cbt/admin', 
+'Cbt\AdminController@store');
+
+Route::put('cbt/admin/{admin}', 
+'Cbt\AdminController@update');
+
+Route::delete('cbt/admin/{admin}', 
+'Cbt\AdminController@destroy');
+
+Route::get('cbt/get_admin/{admin}', 
+'Cbt\AdminController@show');
+
+Route::get('cbt/get_admins', 
+'Cbt\AdminController@get_admins');
+
+Route::post('cbt/add_permission/{admin}', 
+'Cbt\AdminController@add_permission');
+
+Route::delete('cbt/delete_permission/{admin}', 
+'Cbt\AdminController@delete_permission');
+
+Route::get('cbt/admin/navbars', 
+'Cbt\AdminController@navbars');
+
+Route::get('cbt/admin/permited_navbars/{admin}', 
+'Cbt\AdminController@permited_navbars');
+
+Route::get('cbt/admin/navbargroup', 
+'Cbt\AdminController@navbargroup');
+
+Route::get('cbt/admin/login', 
+'Cbt\AdminLoginController@ShowLoginForm')->name('admin.login');
+
+Route::post('cbt/admin/login', 
+'Cbt\AdminLoginController@login')->name('admin.login.attempt');
+
+Route::get('cbt/admin/logout', 
+'Cbt\AdminLoginController@logout')->name('admin.logout');
 
 // --------Departments-----------
-Route::get('department/exam/{department}', 'DepartmentController@exam')->middleware('authadm:admin');;
-Route::resource('department', 'DepartmentController', ['except' => ['edit', 'create']])->middleware('authadm:admin');;
+Route::get('cbt/department/exam/{department}', 
+'Cbt\DepartmentController@exam');
+
+Route::resource('cbt/department', 
+'Cbt\DepartmentController', ['except' => ['edit', 'create']]);
 // --------Courses-----------
-Route::get('getcourse/{course}', 'CourseController@getcourse');
-Route::get('coursequestions/{course}', 'CourseController@questions');
-Route::resource('course', 'CourseController', ['except' => ['edit', 'create']]);
+Route::get('cbt/getcourse/{course}', 
+'Cbt\CourseController@getcourse');
+
+Route::get('cbt/coursequestions/{course}', 
+'Cbt\CourseController@questions');
+
+Route::resource('cbt/course', 
+'Cbt\CourseController', ['except' => ['edit', 'create']]);
 // --------sections-----------
-Route::get('sectionquestions/{section}', 'CourseSectionController@questions');
-Route::resource('section', 'CourseSectionController', ['except' => ['edit', 'create']]);
+Route::get('cbt/sectionquestions/{section}', 
+'Cbt\CourseSectionController@questions');
+
+Route::resource('cbt/section', 
+'Cbt\CourseSectionController', ['except' => ['edit', 'create']]);
 // --------questions-----------
-Route::resource('question', 'QuestionController', ['except' => ['edit', 'create']])->middleware('authadm:admin');
+Route::resource('cbt/question', 
+'Cbt\QuestionController', ['except' => ['edit', 'create']]);
 // --------Exam-----------
-Route::post('exam/coursesection', 'ExamController@coursesection');
-Route::get('exam/deletesection/{section}', 'ExamController@deletesection');
-Route::get('exam/sections/{exam}', 'ExamController@sections');
-Route::get('exam/{exam}/{course}', 'ExamController@course');
-Route::resource('exam', 'ExamController', ['except' => ['edit', 'create']]);
+Route::post('cbt/exam/coursesection', 
+'Cbt\ExamController@coursesection');
+
+Route::get('cbt/exam/deletesection/{section}', 
+'Cbt\ExamController@deletesection');
+
+Route::get('cbt/exam/sections/{exam}', 
+'Cbt\ExamController@sections');
+
+Route::get('cbt/exam/{exam}/{course}', 
+'Cbt\ExamController@course');
+
+Route::resource('cbt/exam', 
+'Cbt\ExamController', ['except' => ['edit', 'create']]);
 
 // --------Students-----------
 Route::get('/', 'HomeController@index');
 // Route::get('/', 'Auth\StudentsLoginController@ShowLoginForm')->name('student');
-Route::get('student', 'StudentController@index')->name('student.dashboard');
-Route::post('student/login', 'Auth\StudentsLoginController@login')->name('student.login');
-Route::get('student/logout', 'Auth\StudentsLoginController@logout')->name('student.logout');
+Route::get('cbt', 'Cbt\StudentsLoginController@login');
+
+Route::get('student', 
+'Cbt\StudentController@index')->name('student.dashboard');
+
+Route::post('student/login', 
+'Cbt\StudentsLoginController@login')->name('student.login');
+
+Route::get('student/logout', 
+'Cbt\StudentsLoginController@logout')->name('student.logout');
 
 // ------------ Library ------------- 
-Route::get('library', 'Library\HomeController@index')->name('lib.home');
-Route::get('library/admin', 'Library\Admin\HomeController@index')->name('lib.admin.dashboard');
-Route::get('library/admin/login', 'Library\Admin\LoginController@showLoginForm')->name('lib.admin.loginform');
-Route::post('library/admin/login', 'Library\Admin\LoginController@login')->name('lib.admin.login');
+Route::get('library', 
+'Library\HomeController@index')->name('lib.home');
 
+Route::get('library/admin', 
+'Library\Admin\HomeController@index')->name('lib.admin.dashboard');
+
+Route::get('library/admin/login', 
+'Library\Admin\LoginController@showLoginForm')->name('lib.admin.loginform');
+
+Route::post('library/admin/login', 
+'Library\Admin\LoginController@login')->name('lib.admin.login');
+
+Route::get('library/admin/logout', 
+'Library\Admin\LoginController@logout')->name('lib.admin.logout');
+
+Route::get('library/department', 
+'Library\LibResourceController@res_department');
+
+Route::resource('library/res_type', 
+'Library\LibResourceTypeController', ['except' => ['edit', 'create', 'show']]);
 // Auth::routes();
 // Route::get('/home', 'HomeController@index')->name('home');

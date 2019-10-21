@@ -26,6 +26,7 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
+        "laravel-vue-datatable": "^0.3.13",
         "moment": "^2.24.0",
         "startbootstrap-sb-admin-2": "^4.0.6",
         "sweetalert2": "^8.15.2",

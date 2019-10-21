@@ -9,9 +9,14 @@
             <div class="card-body p-0">
             <!-- Nested Row within Card Body -->
             <div class="row justify-content-center">
-                <div class="col-4 mb-5 pb-5">
+                    <div class="col-lg-4 col-md-6 col-sm-8 mb-5 pb-5">
+                    <h4 class="text-center">Library Admin</h4>
                     <form method="POST" action="{{ route('lib.admin.login') }}" class="user">
                         @csrf
+                        <input type="hidden" 
+                        name="redirectTo" value="library/admin">
+                        <input type="hidden" 
+                        name="redirectTo" value="library/admin">
                         <div class="form-group">
                             <input type="text" 
                             class="form-control form-control-user shadow-lg @error('username') is-invalid @enderror" 
