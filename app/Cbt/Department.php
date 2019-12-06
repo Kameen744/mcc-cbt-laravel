@@ -35,7 +35,7 @@ class Department extends Model
 
     public function exam()
     {
-        return $this->hasMany(Exam::class, 'department_id');
+        return $this->belongsToMany(Exam::class, 'exam_department');
     }
 
     public function lib_res()

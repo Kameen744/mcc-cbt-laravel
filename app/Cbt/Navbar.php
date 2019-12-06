@@ -2,7 +2,7 @@
 
 namespace App\Cbt;
 
-use App\Cbt\Admin;
+use App\Admin\Admin;
 use App\Cbt\NavGroup;
 use Illuminate\Database\Eloquent\Model;
 

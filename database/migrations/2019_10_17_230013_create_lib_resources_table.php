@@ -15,11 +15,13 @@ class CreateLibResourcesTable extends Migration
     {
         Schema::create('lib_resources', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('title');
-            $table->string('subject');
-            $table->string('author');
-            $table->string('type_id');
-            $table->string('department_id');
+            $table->string('res_title');
+            $table->string('res_subject');
+            $table->string('res_author');
+            $table->string('res_type_id');
+            $table->string('res_department_id');
+            $table->string('res_files');
+            $table->string('res_cover');
             $table->timestamps();
         });
     }

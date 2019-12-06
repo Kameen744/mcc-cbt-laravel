@@ -50,11 +50,11 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Resources: </h6>
                     <router-link 
-                    :to="`/resource-type`" class="collapse-item">
+                    :to="`resource-type`" class="collapse-item">
                         Resources Type
                     </router-link>
                     <router-link 
-                    :to="`/lib-resources`" class="collapse-item">
+                    :to="`lib-resources`" class="collapse-item">
                         Library Resources
                     </router-link>
                 </div>
@@ -86,8 +86,8 @@
             <div id="content">
                 <navbar-top :username="username" :logout="logout"></navbar-top>
                 <div class="container-fluid m-0 p-1">
-                   <!-- <component :is="pageBody"></component> -->
                    <router-view></router-view>
+                   <vue-progress-bar></vue-progress-bar>
                 </div>
             </div>
             <footer class="sticky-footer bg-white">

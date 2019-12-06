@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Cbt;
 
 use App\Cbt\Course;
 use Illuminate\Http\Request;
+use App\CustomClasses\DataTableRes;
 use App\Http\Controllers\Controller;
 
 class CourseController extends Controller
@@ -18,9 +19,9 @@ class CourseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request, DataTableRes $DataTable, Course $course)
     {
-        return Course::all();
+        return $DataTable->get_collections($request, $course);
     }
 
     /**

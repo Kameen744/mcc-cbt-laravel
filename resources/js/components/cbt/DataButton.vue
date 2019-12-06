@@ -1,9 +1,8 @@
 <template>
-   <button :class="classes" @click="click(data)" title="Update">
+    <button :class="classes" @click="click(data)" title="Update">
         <span>
             <i class="fas fa-eye"></i>
         </span>
-        &nbsp;
         {{ name }}
     </button>
 </template>

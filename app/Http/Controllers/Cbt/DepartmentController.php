@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Cbt;
 
 use App\Cbt\Department;
 use Illuminate\Http\Request;
+use App\CustomClasses\DataTableRes;
 use App\Http\Controllers\Controller;
-use JamesDordoy\LaravelVueDatatable\Http\Resources\DataTableCollectionResource;
 
 class DepartmentController extends Controller
 {
@@ -18,24 +18,12 @@ class DepartmentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    private function getRec($request)
-    {
-        $length = $request->input('length');
-        $column = $request->input('column'); //Index
-        $orderBy = $request->input('dir', 'asc');
-        $searchValue = $request->input('search');
-        
-        $query = Department::dataTableQuery($column, $orderBy, $searchValue);
-        $data = $query->paginate($length);
-        
-        return new DataTableCollectionResource($data);
-    }
 
-    public function index(Request $request)
+    public function index(Request $request, DataTableRes $DataTable, Department $Dept)
     {
-        // return Department::all();
-        return $this::getRec($request);
+        return $DataTable->get_collections($request, $Dept);
     }
+    
 
     /**
      * Store a newly created resource in storage.

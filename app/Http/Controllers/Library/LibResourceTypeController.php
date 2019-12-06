@@ -2,32 +2,29 @@
 
 namespace App\Http\Controllers\Library;
 
+use App\Library\LibResource;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Library\LibResourceType;
+use App\CustomClasses\DataTableRes;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-use JamesDordoy\LaravelVueDatatable\Http\Resources\DataTableCollectionResource;
 
 class LibResourceTypeController extends Controller
 {
+    public function __construct() 
+    {
+        $this->middleware('authadm:admin')->except('index');
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, DataTableRes $DataTable, LibResourceType $Res)
     {
-        $length = $request->input('length');
-        $column = $request->input('column'); //Index
-        $orderBy = $request->input('dir', 'asc');
-        $searchValue = $request->input('search');
-        
-        $query = LibResourceType::dataTableQuery($column, $orderBy, $searchValue);
-        $data = $query->paginate($length);
-        
-        return new DataTableCollectionResource($data);
+        return $DataTable->get_collections($request, $Res);
     }
 
     /**
@@ -37,21 +34,22 @@ class LibResourceTypeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        
+    {   
         $data = $this->validate($request, [
             'res_type' => 'required|string|unique:lib_resource_types,res_type|not_regex:~\W~'
         ]);
-      
-        $path = storage_path().'/app/public/library/' .$data['res_type'];
-        if(!$check = File::isDirectory($path)) {
-            File::makeDirectory($path, true, true) ? $data['path'] = $path : $data = [];
-        }
         
+        $folder = 'library/' .$data['res_type'];
+        $path = storage_path().'/app/public/' .$folder;
+
+        if(!File::isDirectory($path)) {
+            File::makeDirectory($path, true, true);
+        } else {
+            return 'Folder already exist. Use edit to modify it.';
+        }
+
+        $data['path'] = $folder;
         return LibResourceType::create($data);
-       
-        // $store = Storage::disk('library');
-        // return $data;
     }
 
     /**
@@ -67,14 +65,19 @@ class LibResourceTypeController extends Controller
             'res_type' => 'required'
         ]);
 
-        $path = storage_path().'/app/public/library/' .$data['res_type'];
-        
-        File::moveDirectory($res_type->path, $path) ? $data['path'] = $path : $data = [];
+        $folder = 'library/' .$data['res_type'];
+        $path = storage_path().'/app/public/' .$folder;
 
+        if(File::moveDirectory(storage_path().'/app/public/'.$res_type->path, $path)) {
+            $data['path'] = $folder;
+        } else {
+            return 'The folder does not exist';
+        }
+        
         $res_type->update($data);
         return $res_type;
     }
-    // Storage::putFileAs('photos', new File('/path/to/photo'), 'photo.jpg');
+    
     /**
      * Remove the specified resource from storage.
      *
@@ -88,4 +91,13 @@ class LibResourceTypeController extends Controller
         return $res_type;
     }
 
+    public function get_all() 
+    {
+       return LibResourceType::all();
+    }
+
+    public function count_all(LibResourceType $res_type)
+    {
+        return $res_type->lib_res()->count();
+    }
 }

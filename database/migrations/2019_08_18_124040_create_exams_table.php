@@ -15,7 +15,6 @@ class CreateExamsTable extends Migration
     {
         Schema::create('exams', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('department_id');
             // $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
             $table->string('exam');
             $table->date('exam_date');

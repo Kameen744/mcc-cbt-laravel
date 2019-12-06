@@ -8,6 +8,7 @@ use App\Cbt\Department;
 use App\Cbt\ExamSection;
 use App\Cbt\CourseSection;
 use Illuminate\Http\Request;
+use App\CustomClasses\DataTableRes;
 use App\Http\Controllers\Controller;
 
 class ExamController extends Controller
@@ -17,15 +18,14 @@ class ExamController extends Controller
         $this->middleware('authadm:admin');
     }
 
-    public function index()
+    public function index(Request $request, DataTableRes $DataTable, Exam $exam)
     {
-        return Exam::all();
+        return $DataTable->get_collections($request, $exam);
     }
 
     private function validateData($request)
     {
         $data = $this->validate($request, [
-            'department_id' => 'required',
             'exam' => 'required',
             'exam_date' => 'required|date',
             'exam_time' => 'required',
@@ -48,7 +48,7 @@ class ExamController extends Controller
 
         Exam::create($data);
 
-        return Department::find($request->department_id)->exam;
+        // return Department::find($request->department_id)->exam;
     }
 
     /**
@@ -116,13 +116,18 @@ class ExamController extends Controller
         return $resArray;
     }
 
-    public function coursesection(Request $request, ExamSection $section)
+    public function departments(Exam $exam)
+    {
+        return $exam->department;
+    }
+
+    public function course_section(Request $request, ExamSection $section)
     {
         $data = $this->validate($request, [
-            'exam_id' => 'required',
-            'course_id' => 'required',
-            'section_id' => 'required',
-            'no_questions' => 'required'
+            'exam_id'       => 'required',
+            'course_id'     => 'required',
+            'section_id'    => 'required',
+            'no_questions'  => 'required'
         ]);
 
         $section->create($data);
@@ -130,11 +135,23 @@ class ExamController extends Controller
         return $this->sections($exam);
     }
 
-    public function deletesection(ExamSection $section)
+    public function exam_department(Exam $exam, Department $department)
+    {
+        $exam->department()->syncWithoutDetaching($department);
+        return $exam->department;
+    }
+
+    public function del_exam_section(ExamSection $section)
     {
         $section->delete();
         $exam = Exam::findOrFail($section->exam_id);
         return $this->sections($exam);
 
+    }
+
+    public function del_exam_department(Exam $exam, Department $department) 
+    {
+        $exam->department()->detach($department);
+        return $exam->department;
     }
 }

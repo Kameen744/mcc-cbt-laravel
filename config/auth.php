@@ -89,11 +89,11 @@ return [
         ],
         'students' => [
             'driver' => 'eloquent',
-            'model' => App\Student::class,
+            'model' => App\Student\Student::class,
         ],
         'admins' => [
             'driver' => 'eloquent',
-            'model' => App\Cbt\Admin::class,
+            'model' => App\Admin\Admin::class,
         ],
         'libadmins' => [
             'driver' => 'eloquent',

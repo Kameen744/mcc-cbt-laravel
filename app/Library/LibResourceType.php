@@ -26,6 +26,6 @@ class LibResourceType extends Model
 
     public function lib_res()
     {
-        return $this->hasMany(LibResource::class);
+        return $this->hasMany(LibResource::class, 'res_type_id');
     }
 }

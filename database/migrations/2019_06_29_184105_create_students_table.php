@@ -15,7 +15,22 @@ class CreateStudentsTable extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('appnumber');
+            $table->string('app_number')->unique();
+            $table->string('fullname');
+            $table->string('gender');
+            $table->string('state_of_origin')->nullable();
+            $table->string('lga_of_origin')->nullable();
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('mode_of_entry')->nullable();
+            $table->string('first_choice')->nullable();
+            $table->string('second_choice')->nullable();
+            $table->string('o_level_1')->nullable();
+            $table->string('o_level_2')->nullable();
+            $table->unsignedBigInteger('department_id');
+            $table->boolean('admited')->default(0)->change();
+            $table->string('admission_number')->nullable();
+            $table->string('vn_number');
             $table->string('password');
             $table->timestamps();
         });

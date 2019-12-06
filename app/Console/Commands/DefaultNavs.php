@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Admin;
-use App\Navbar;
-use App\NavGroup;
+use App\Cbt\Navbar;
+use App\Admin\Admin;
+use App\Cbt\NavGroup;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
 
@@ -15,7 +15,7 @@ class DefaultNavs extends Command
      *
      * @var string
      */
-    protected $signature = 'mcchst:createadmin';
+    protected $signature = 'mcchst:createapp';
 
     /**
      * The console command description.
@@ -35,14 +35,15 @@ class DefaultNavs extends Command
     {
         try {
             $admin = Admin::create([
-                'username' => 'Admin',
-                'password' => Hash::make('admin') 
+                'username' => 'Kamal',
+                'password' => Hash::make('kameen') 
             ]);
             $groups = [
                 ['name' => 'Department'],
                 ['name' => 'Exams'],
                 ['name' => 'Staff'],
-                ['name' => 'Students']
+                ['name' => 'Students'],
+                ['name' => 'Library']
             ];
             foreach ($groups as $group) {
                 NavGroup::create($group);
@@ -66,12 +67,15 @@ class DefaultNavs extends Command
                     case 'Students':
                         $this::createNavbar('Upload Students', $value->id, $admin);
                         break;
+                    case 'Library':
+                        $this::createNavbar('Resource Type', $value->id, $admin);
+                        $this::createNavbar('Resources', $value->id, $admin);
                     
                     default:
                         break;
                 }
             }
-            $this->info($admin->name .' Created successfully. Username: Admin, Password: admin.' );
+            $this->info($admin->name .' Created successfully. Username: Kamal, Password: kameen.' );
         } catch (\Throwable $th) {
             $this->error($th);
         }
