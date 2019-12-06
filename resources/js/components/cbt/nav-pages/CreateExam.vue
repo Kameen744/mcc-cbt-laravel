@@ -4,59 +4,17 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="row">
-                        <div class="col-md-6"> 
-                            <h4 class="card-title text-white">Create Exams</h4>
+                        <div class="col-md-6">
+                            <h4 class="card-title">Exam</h4>
                         </div>
-                        <div class="col-md-4">
-                            <select @change="getDeptExams" class="float-right form-control form-control-sm" 
-                                name="course" id="course">
-                                <option selected disabled>Department</option>
-                                <option v-for="department in departments" :key="department.id" :value="department.id">
-                                    {{department.department}}
-                                </option>
-                            </select>
-                        </div>
-                        <div class="col-md-2">
-                            <button @click="showExamModal(null)" type="button" 
-                                class="float-right btn btn-danger btn-sm">
-                                <i class="fas fa-plus-circle"></i> Create Exam
-                            </button>
-                        </div>
+                        <button @click="showExamModal(null)" type="button" 
+                            class="float-right btn btn-danger btn-sm">
+                            <i class="fas fa-plus-circle"></i> Create Exam
+                        </button>
                     </div>
-                </div>
-                <div class="col-md-12">
-                     <table class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th>S/N</th>
-                                <th>Exam</th>
-                                <th>Date</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody v-for="(exam, index) in exams" :key="exam.id">
-                            <tr>
-                                <td>{{index+1}}</td>
-                                <td>{{exam.exam}}</td>
-                                <td>{{exam.exam_date | myDate}}</td>
-                                <td>
-                                    <button class="rounded-circle btn-success" @click="viewExamModal(exam)">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="rounded-circle btn-warning" @click="settingExamModal(exam)">
-                                        <i class="fas fa-wrench"></i>
-                                    </button>
-                                    <button class="rounded-circle btn-info" @click="showExamModal(exam)">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <i> </i>
-                                    <button class="rounded-circle btn-danger" @click="deleteExam(exam.id)">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="col-12 p-0 mb-1"><hr class="p-0 m-0 bg-white"></div>
+                    <data-table :columns="columns" :key="data_table_key"
+                    :classes="classes" url="exam"></data-table>
                 </div>
             </div>
         </div>
@@ -148,6 +106,47 @@
                 </div>
             </div>
         </div>  
+        <!-- ----------------View Exam Modal ------------------------ -->
+        <div class="modal swal2-modal swal2-show" id="viewCourse" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header py-1">
+                        <h5 class="modal-title text-primary">{{exam.exam}}</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row shadow-sm justify-content-center">
+                                <div class="col-md-auto">
+                                    <button @click="viewExamModal(exam)"
+                                    class="btn btn-success btn-sm">
+                                    <i class="fas fa-eye"></i> View</button>
+                                </div>
+                                <div class="col-md-auto">
+                                    <button @click="settingExamModal(exam)"
+                                    class="btn btn-warning btn-sm">
+                                    <i class="fas fa-wrench"></i> Settings</button>
+                                </div>
+                                <div class="col-md-auto">
+                                    <button @click="showExamModal(exam)"
+                                    class="btn btn-info btn-sm">
+                                    <i class="fas fa-edit"></i> Edit</button>
+                                </div>
+                                <div class="col-md-auto">
+                                    <button @click="deleteExam(exam.id)"
+                                    class="btn btn-danger btn-sm">
+                                    <i class="fas fa-trash"></i> Delete</button>
+                                </div>
+                            </div>
+                            <div class="card-body shadow-sm text-dark">
+                                <h4 class="card-title">{{course.course}}</h4>
+                                <h5 class="card-title">Created on {{course.created_at | myDate}}</h5>
+                            </div>
+                             
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
           <!----------------View Modal -----------------  -->
         <div class="modal swal2-show" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -180,7 +179,9 @@
                                             </tr>
                                             <tr v-if="examSections[0]">
                                                 <th>Total Questions</th>
-                                                <th colspan="3" class="text-center">{{examSections[0].ttquestions}}</th>
+                                                <th colspan="3" class="text-center">
+                                                    {{examSections[0].ttquestions}}
+                                                </th>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -343,6 +344,45 @@
 export default {
     data(){
         return {
+            columns: [
+                {
+                    label: 'Exam',
+                    name: 'exam',
+                    filterable: true,
+                },
+                {
+                    label: 'Exam Date',
+                    name: 'exam_date',
+                    filterable: true,
+                },
+                {
+                    label: 'Created',
+                    name: 'created_at',
+                    filterable: true,
+                },
+                {
+                    label: '',
+                    name: 'View',
+                    filterable: false,
+                    classes: { 
+                        'btn': true,
+                        'btn-danger': true,
+                        'btn-sm': true,
+                    },
+                    event: "click",
+                    handler: this.viewExam,
+                    component: DataButtonVue, 
+                }
+            ],
+            classes: { 
+               
+                table: {
+                    'table': true,
+                    'table-striped': true,
+                    'table-bordered': true,
+                    'text-white': true
+                }
+            },
             departments: [],
             editExamMode: false,
             form: new Form({
@@ -358,6 +398,7 @@ export default {
                 section_id: '',
                 no_questions: ''
             }),
+            data_table_key: 0,
             examSections: [],
             examDepartments: [],
             department_id: '',
@@ -370,14 +411,15 @@ export default {
         }
     },
     created(){
-        axios.get(`exam`)
-        .then(res => {
-            this.exams = res.data.data; 
-            axios.get(`department`)
+        // axios.get(`exam`)
+        // .then(res => {
+        //     this.exams = res.data.data; 
+            
+        // });
+        axios.get(`department`)
             .then(res => {
                 this.departments = res.data.data; 
             });
-        });
         
     },
     methods: {
@@ -416,6 +458,10 @@ export default {
                 this.form.reset();
             });
             this.$Progress.finish();
+        },
+        viewExam(exam) {
+            this.exam = exam;
+            $('#viewCourse').modal('show');
         },
         viewExamModal(exam){
             if(exam){
@@ -488,7 +534,7 @@ export default {
                 });
             this.$Progress.finish();
         },
-        deleteExam(id){
+        deleteExam(id) {
              Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",

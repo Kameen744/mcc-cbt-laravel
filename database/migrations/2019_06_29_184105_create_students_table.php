@@ -28,7 +28,7 @@ class CreateStudentsTable extends Migration
             $table->string('o_level_1')->nullable();
             $table->string('o_level_2')->nullable();
             $table->unsignedBigInteger('department_id');
-            $table->boolean('admited')->default(0)->change();
+            $table->boolean('admited')->default(0);
             $table->string('admission_number')->nullable();
             $table->string('vn_number');
             $table->string('password');

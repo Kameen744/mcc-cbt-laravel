@@ -21,6 +21,7 @@ class CreateExamsTable extends Migration
             $table->time('exam_time');
             $table->unsignedTinyInteger('exam_hours');
             $table->unsignedTinyInteger('exam_minutes');
+            $table->boolean('started')->default(0)->change();
             $table->timestamps();
         });
     }

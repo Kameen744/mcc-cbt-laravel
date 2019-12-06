@@ -47,7 +47,6 @@
                                 <h4 class="card-title">{{course.course}}</h4>
                                 <h5 class="card-title">Created on {{course.created_at | myDate}}</h5>
                             </div>
-                             
                         </div>
                     </div>
                 </div>

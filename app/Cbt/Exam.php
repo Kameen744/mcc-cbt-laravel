@@ -17,10 +17,16 @@ class Exam extends Model
         'id' => [
             'searchable' => true,
         ],
-        'department' => [
+        'exam' => [
             'searchable' => true,
         ],
-        'department_code' => [
+        'exam_date' => [
+            'searchable' => true,
+        ],
+        'exam_time' => [
+            'searchable' => true,
+        ],
+        'started' => [
             'searchable' => true,
         ],
         'created_at' => [
