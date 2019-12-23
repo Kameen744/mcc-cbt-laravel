@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Cbt;
 use App\Cbt\Course;
 use App\Cbt\Question;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use App\Imports\QuestionImport;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
@@ -92,6 +93,50 @@ class QuestionController extends Controller
     public function destroy(question $question)
     {
         $question->delete();
-        return Course::find($question->course_id)->questions;
+        return Course::find($question->course_id)
+        ->questions()->where('section_id', $question->section_id)
+        ->get();
     }
+
+    // upload questions
+    public function upload_question(Request $request)
+    {
+        $this->validate($request, [
+            'course_id' => 'required',
+            'section_id' => 'required'
+        ]);
+        
+        $insertData = [];
+    
+        $now = Carbon::now();
+        
+        if($request->questions) {
+            $questions = $request->questions;
+            foreach ($questions as $i => $question) { 
+                if($i > 0) {
+                    $row = [
+                        'course_id'     => $request->course_id,
+                        'section_id'    => $request->section_id,
+                        'question'      => $question[1],
+                        'option_a'      => $question[2],
+                        'option_b'      => $question[3],
+                        'option_c'      => $question[4],
+                        'option_d'      => $question[5],
+                        'answer'        => $question[6],
+                        'created_at'    => $now,
+                        'updated_at'    => $now
+                    ];
+                    array_push($insertData, $row);
+                } 
+            }
+
+            try {
+                    Question::insert($insertData);
+                    return 'Successfully uploaded ' .count($insertData) .' questions';
+            } catch (\Throwable $th) {
+                return 'There\'s a duplicate or empty column in your file';
+            }
+        }
+    }
+
 }

@@ -18,7 +18,6 @@ class CreateNavbarsTable extends Migration
             $table->string('name');
             $table->unsignedBigInteger('navgroup_id');
             $table->timestamps();
-            // $table->foreign('navgroup_id')->references('id')->on('nav_groups')->onDelete('cascade');
         });
     }
 

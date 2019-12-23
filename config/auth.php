@@ -44,6 +44,10 @@ return [
             'driver' => 'session',
             'provider' => 'students',
         ],
+        'cbt' => [
+            'driver' => 'session',
+            'provider' => 'students',
+        ],
         'admin' => [
             'driver' => 'session',
             'provider' => 'admins',

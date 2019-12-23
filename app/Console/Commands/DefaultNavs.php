@@ -60,6 +60,7 @@ class DefaultNavs extends Command
                         $this::createNavbar('Section Questions', $value->id, $admin);
                         $this::createNavbar('Exam Questions', $value->id, $admin);
                         $this::createNavbar('Create Exam', $value->id, $admin);
+                        $this::createNavbar('Exam Result', $value->id, $admin);
                         break;
                     case 'Staff':
                         $this::createNavbar('Create Staff', $value->id, $admin);

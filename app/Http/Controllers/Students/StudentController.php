@@ -11,18 +11,16 @@ class StudentController extends Controller
     public function __construct()
     {
         $this->middleware('authstu:student'); 
-        // ? : $this->middleware('authadm:admin');
     }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
         return view('students.dashboard');
     }
-
     /**
      * Show the form for creating a new resource.
      *

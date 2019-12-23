@@ -82,6 +82,9 @@ Route::resource('section',
 // --------questions-----------
 Route::resource('question', 
 'Cbt\QuestionController', ['except' => ['edit', 'create']]);
+
+Route::post('upload_question',
+'Cbt\QuestionController@upload_question');
 // --------Exam-----------
 Route::post('exam/course_section', 
 'Cbt\ExamController@course_section');
@@ -106,12 +109,36 @@ Route::get('exam/{exam}/{course}',
 
 Route::resource('exam', 
 'Cbt\ExamController', ['except' => ['edit', 'create']]);
-// --------Students-----------
+
+Route::get('exam_scores/{exam}', 'Cbt\ExamController@exam_scores');
+// --------Public Home page-----------
 Route::get('/', 'HomeController@index');
 // Route::get('/', 'Auth\StudentsLoginController@ShowLoginForm')->name('student');
 
-Route::get('cbt', 'Students\StudentsLoginController@ShowLoginForm');
+// --------Exam / login -----------
+
+Route::get('cbt', 'Cbt\CbtController@index')->name('exam');
+
+Route::get('cbt/login', 'Cbt\CbtLoginController@showLoginForm')->name('exam.login.form');
+
+Route::post('cbt/login', 'Cbt\CbtLoginController@login')->name('exam.login');
+
+Route::get('cbt/logout', 'Cbt\CbtLoginController@logout')->name('exam.logout');
+
+Route::get('get_exams/{department}', 'Cbt\CbtController@get_exams');
+Route::get('get_course_questions/{student}/{exam}/{course}', 'Cbt\CbtController@get_course_questions');
+Route::post('get_attempted', 'Cbt\CbtController@get_attempted');
+
+Route::post('attempt', 'Cbt\CbtController@attempt');
+
+// Route::get('cbt/exam', 
+// 'Students\StudentController@examdashboard')->name('exam.dashboard');
+
+// --------Students / Login -----------
 Route::get('student', 
+'Students\StudentController@index')->name('student.dashboard');
+
+Route::get('student/login', 
 'Students\StudentsLoginController@ShowLoginForm')->name('student.loginform');
 
 Route::post('student/login', 
@@ -120,15 +147,15 @@ Route::post('student/login',
 Route::get('student/logout', 
 'Students\StudentsLoginController@logout')->name('student.logout');
 
-// -----------students Resource ---------------------
-Route::get('student/dashboard', 
-'Students\StudentController@index')->name('student.dashboard');
 
+
+// -----------students Resource ---------------------
 Route::get('get_students', 'Admin\ManageStudentsController@index');
 Route::post('student', 'Admin\ManageStudentsController@store');
 Route::put('student/{student}', 'Admin\ManageStudentsController@update');
 Route::delete('student/{student}', 'Admin\ManageStudentsController@destroy');
 // ------------ Library ------------- 
+
 Route::get('library', 
 'Library\HomeController@index')->name('lib.home');
 

@@ -29,6 +29,6 @@ class ExamSection extends Model
 
     public function exam()
     {
-        return $this->hasMany(Exam::class);
+        return $this->belongsToMany(Exam::class);
     }
 }

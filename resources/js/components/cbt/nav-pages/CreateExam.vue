@@ -14,7 +14,7 @@
                     </div>
                     <div class="col-12 p-0 mb-1"><hr class="p-0 m-0 bg-white"></div>
                     <data-table :columns="columns" :key="data_table_key"
-                    :classes="classes" url="exam"></data-table>
+                    :classes="classes" :font="font" url="exam"></data-table>
                 </div>
             </div>
         </div>
@@ -34,35 +34,26 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <label>Exam name/description</label>
-                                    <div class="form-group">
-                                        <input type="text" class="form-control form-control-sm"
-                                        :class="{ 'is-invalid': form.errors.has('exam')}" 
-                                        name="exam" v-model="form.exam"
-                                        placeholder="Exam e.g First Entrance Exam">
-                                        <has-error :form="form" field="exam"></has-error>
-                                    </div>
+                                    <input-tag :groupClass="'form-group'"
+                                        :form="form" :type="'text'" :name="'exam'" 
+                                        :placeholder="'Exam e.g First Entrance Exam'">
+                                    </input-tag>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
                                     <label>Date</label>
-                                    <div class="form-group">
-                                        <input type="date" class="form-control form-control-sm" 
-                                        :class="{ 'is-invalid': form.errors.has('exam_date')}"                                        
-                                        name="exam_date" v-model="form.exam_date"
-                                        placeholder="Exam Date">
-                                        <has-error :form="form" field="exam_date"></has-error>
-                                    </div>
+                                    <input-tag :groupClass="'form-group'"
+                                        :form="form" :type="'date'" :name="'exam_date'" 
+                                        :placeholder="'Exam Date'">
+                                    </input-tag>
                                 </div>
                                 <div class="col-md-6">
                                     <label>Time</label>
-                                    <div class="form-group">
-                                        <input type="time" class="form-control form-control-sm" 
-                                        :class="{ 'is-invalid': form.errors.has('exam_time')}"                                        
-                                        name="exam_time" v-model="form.exam_time"
-                                        placeholder="Exam Time">
-                                        <has-error :form="form" field="exam_time"></has-error>
-                                    </div>
+                                    <input-tag :groupClass="'form-group'"
+                                        :form="form" :type="'time'" :name="'exam_time'" 
+                                        :placeholder="'Exam Time'">
+                                    </input-tag>
                                 </div>
                             </div>
                             <div class="row">
@@ -71,24 +62,17 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label>Hours</label>
-                                    <div class="form-group">
-                                        <input type="number" class="form-control form-control-sm"
-                                        :class="{ 'is-invalid': form.errors.has('exam_hours')}"
-                                        name="exam_hours" v-model="form.exam_hours"
-                                        placeholder="Hours">
-                                        <has-error :form="form" field="exam_hours"></has-error>
-                                    </div>
+                                    <input-tag :groupClass="'form-group'"
+                                        :form="form" :type="'number'" :name="'exam_hours'" 
+                                        :placeholder="'Hours'">
+                                    </input-tag>
                                 </div>
                                 <div class="col-md-6">
                                     <label>Minutes</label>
-                                    <div class="form-group">
-                                        <input type="number" class="form-control form-control-sm" 
-                                        name="exam_minutes" v-model="form.exam_minutes"
-                                        :class="{ 'is-invalid': form.errors.has('exam_minutes')}" 
-                                        placeholder="Minutes">
-                                        
-                                        <has-error :form="form" field="exam_minutes"></has-error>
-                                    </div>
+                                    <input-tag :groupClass="'form-group'"
+                                        :form="form" :type="'number'" :name="'exam_minutes'" 
+                                        :placeholder="'Hours'">
+                                    </input-tag>
                                 </div>
                             </div>
                         </div>
@@ -116,30 +100,78 @@
                     <div class="modal-body">
                         <div class="container-fluid">
                             <div class="row shadow-sm justify-content-center">
-                                <div class="col-md-auto">
+                                <!-- <div class="col-md-auto">
                                     <button @click="viewExamModal(exam)"
                                     class="btn btn-success btn-sm">
                                     <i class="fas fa-eye"></i> View</button>
-                                </div>
+                                </div> -->
                                 <div class="col-md-auto">
                                     <button @click="settingExamModal(exam)"
                                     class="btn btn-warning btn-sm">
                                     <i class="fas fa-wrench"></i> Settings</button>
                                 </div>
-                                <div class="col-md-auto">
+                                <!-- <div class="col-md-auto">
                                     <button @click="showExamModal(exam)"
                                     class="btn btn-info btn-sm">
                                     <i class="fas fa-edit"></i> Edit</button>
-                                </div>
+                                </div> -->
                                 <div class="col-md-auto">
                                     <button @click="deleteExam(exam.id)"
                                     class="btn btn-danger btn-sm">
                                     <i class="fas fa-trash"></i> Delete</button>
                                 </div>
                             </div>
-                            <div class="card-body shadow-sm text-dark">
-                                <h4 class="card-title">{{course.course}}</h4>
-                                <h5 class="card-title">Created on {{course.created_at | myDate}}</h5>
+                            <div class="card-body shadow-sm text-white bg-primary viewModalBody">
+                                
+                                    <h4 class="card-title text-center">{{exam.exam}}</h4>
+                                    <div class="row">
+                                        <p class="col-3">Date:</p><p class="col-8">{{exam.exam_date | myDate}}</p>
+                                        <p class="col-3">Time:</p><p class="col-8">{{exam.exam_time | myTime}}</p>
+                                        <p class="col-3">Duration:</p>
+                                        <p class="col-8">{{exam.exam_hours}}hr(s) {{exam.exam_minutes}}min(s)</p>
+                                        <div v-if="examSections[0]" class="col-12">
+                                            <table class="table table-bordered table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Course</th>
+                                                        <th>Section</th>
+                                                        <th>No of Q</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr v-for="section in examSections" :key="section.id">
+                                                        <td>{{section.course}}</td>
+                                                        <td>{{section.section}}</td>
+                                                        <td>{{section.no_questions}}</td>
+                                                    </tr>
+                                                    <tr v-if="examSections[0]">
+                                                        <th>Total Questions</th>
+                                                        <th colspan="3" class="text-center">
+                                                            {{examSections[0].ttquestions}}
+                                                        </th>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <hr>
+                                            <table v-if="examDepartments[0]" 
+                                            class="table table-bordered table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Department</th>
+                                                        <th>Code</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr v-for="department in examDepartments" :key="department.id">
+                                                        <td>{{department.department}}</td>
+                                                        <td>{{department.department_code}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <hr>
+                                        </div>
+                                    </div>
+                                
                             </div>
                              
                         </div>
@@ -147,71 +179,7 @@
                 </div>
             </div>
         </div>
-          <!----------------View Modal -----------------  -->
-        <div class="modal swal2-show" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header py-1">
-                        <h5 class="modal-title text-warning">Exam Info</h5>
-                    </div>
-                    <div class="card text-white bg-primary">
-                        <div class="card-body viewModalBody">
-                            <h4 class="card-title text-center">{{exam.exam}}</h4>
-                            <div class="row">
-                                <p class="col-3">Date:</p><p class="col-8">{{exam.exam_date | myDate}}</p>
-                                <p class="col-3">Time:</p><p class="col-8">{{exam.exam_time | myTime}}</p>
-                                <p class="col-3">Duration:</p>
-                                <p class="col-8">{{exam.exam_hours}}hr(s) {{exam.exam_minutes}}min(s)</p>
-                                <div v-if="examSections[0]" class="col-12">
-                                    <table class="table table-bordered table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Course</th>
-                                                <th>Section</th>
-                                                <th>No of Q</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="section in examSections" :key="section.id">
-                                                <td>{{section.course}}</td>
-                                                <td>{{section.section}}</td>
-                                                <td>{{section.no_questions}}</td>
-                                            </tr>
-                                            <tr v-if="examSections[0]">
-                                                <th>Total Questions</th>
-                                                <th colspan="3" class="text-center">
-                                                    {{examSections[0].ttquestions}}
-                                                </th>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <hr>
-                                    <table v-if="examDepartments[0]" 
-                                    class="table table-bordered table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Department</th>
-                                                <th>Code</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="department in examDepartments" :key="department.id">
-                                                <td>{{department.department}}</td>
-                                                <td>{{department.department_code}}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <hr>
-                                </div>
-                            </div>
-                            <button @click="viewExamModal(null)" class="btn btn-danger btn-sm">
-                            <i class="fas fa-times"></i> Close
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
         <!-- ---------- Settings Modal ----------------->
         <div class="modal swal2-show" id="settingModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -361,21 +329,33 @@ export default {
                     filterable: true,
                 },
                 {
-                    label: '',
-                    name: 'View',
+                    name: '  View',
                     filterable: false,
                     classes: { 
                         'btn': true,
-                        'btn-danger': true,
+                        'btn-info': true,
                         'btn-sm': true,
+                        font: 'fas fa-eye'
                     },
                     event: "click",
                     handler: this.viewExam,
                     component: DataButtonVue, 
+                },
+                {
+                    name: '  Edit',
+                    filterable: false,
+                    classes: { 
+                        'btn': true,
+                        'btn-warning': true,
+                        'btn-sm': true,
+                        font: 'fas fa-edit'
+                    },
+                    event: "click",
+                    handler: this.showExamModal,
+                    component: DataButtonVue, 
                 }
             ],
             classes: { 
-               
                 table: {
                     'table': true,
                     'table-striped': true,
@@ -383,6 +363,7 @@ export default {
                     'text-white': true
                 }
             },
+            font: 'fas fa-eye',
             departments: [],
             editExamMode: false,
             form: new Form({
@@ -411,18 +392,16 @@ export default {
         }
     },
     created(){
-        // axios.get(`exam`)
-        // .then(res => {
-        //     this.exams = res.data.data; 
-            
-        // });
         axios.get(`department`)
-            .then(res => {
-                this.departments = res.data.data; 
-            });
+        .then(res => {
+            this.departments = res.data.data; 
+        });
         
     },
     methods: {
+        updateDataTable() {
+            this.data_table_key ? this.data_table_key = 0 : this.data_table_key = 1;
+        },
         getDeptExams(e){
             this.$Progress.start();
             axios.get(`department/exam/${e.target.value}`)
@@ -456,28 +435,21 @@ export default {
                     title: 'saved successfully'
                 });
                 this.form.reset();
+                this.updateDataTable();
             });
             this.$Progress.finish();
         },
         viewExam(exam) {
             this.exam = exam;
+            axios.all([
+                axios.get(`exam/sections/${exam.id}`),
+                axios.get(`exam/departments/${exam.id}`)
+            ])
+            .then(axios.spread((examSectionsRes, exmaDepartmentsRes) => {
+                this.examSections = examSectionsRes.data;
+                this.examDepartments = exmaDepartmentsRes.data;
+            }));
             $('#viewCourse').modal('show');
-        },
-        viewExamModal(exam){
-            if(exam){
-                this.exam = exam;
-                axios.all([
-                    axios.get(`exam/sections/${exam.id}`),
-                    axios.get(`exam/departments/${exam.id}`)
-                ])
-                .then(axios.spread((examSectionsRes, exmaDepartmentsRes) => {
-                    this.examSections = examSectionsRes.data;
-                    this.examDepartments = exmaDepartmentsRes.data;
-                }));
-                $('#viewModal').modal('show');
-            }else{
-                $('#viewModal').modal('hide');
-            }
         },
         settingExamModal(exam){
             if(exam){
@@ -500,14 +472,10 @@ export default {
         },
         addExamCourse(e){
             this.setCourseForm.section_id = '';
-            axios.get(`getcourse/${e.target.value}`)
-            .then(res => {
-                this.course = res.data.course;
-                axios.get(`course/${res.data.id}`)
+             axios.get(`course/${e.target.value}`)
                 .then(res => {
                     this.sections = res.data;
                 });
-            });
         },
         addCourseSections(){
             this.setCourseForm.post(`exam/course_section`)
@@ -531,6 +499,7 @@ export default {
                         type: 'success',
                         title: 'updated successfully'
                     });
+                    this.updateDataTable();
                 });
             this.$Progress.finish();
         },
@@ -553,7 +522,8 @@ export default {
                         'Deleted!',
                         'Exam has been deleted.',
                         'success'
-                        )
+                        );
+                        this.updateDataTable();
                     })
                 }
             });
@@ -574,12 +544,13 @@ export default {
 }
 </script>
 <style scoped>
-.viewModalBody {
-    max-height: 550px;
-    overflow-x: auto;
-}
-.inp-sm {
-    width: 80px;
-}
+    .viewModalBody {
+        max-height: 550px;
+        overflow-x: auto;
+    }
+    .input-group select, .input-group input {
+        max-width: 100px;
+    }
+
 </style>
 

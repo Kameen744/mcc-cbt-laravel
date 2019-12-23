@@ -296,6 +296,7 @@ export default {
                         'btn': true,
                         'btn-danger': true,
                         'btn-sm': true,
+                        font: 'fas fa-eye'
                     },
                     event: "click",
                     handler: this.viewStudent,
@@ -352,7 +353,6 @@ export default {
         viewStudent(student) {
             this.Student = student;
             $('#viewStudent').modal('show');
-            console.log(student);
         },
         newStudent() {
             this.$Progress.start();

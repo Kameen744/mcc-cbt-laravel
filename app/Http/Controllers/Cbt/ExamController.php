@@ -73,7 +73,7 @@ class ExamController extends Controller
     {
         $data = $this::validateData($request);
         $exam->update($data);
-        return Department::find($exam->department_id)->exam;
+        return $exam;
     }
 
     /**
@@ -132,6 +132,7 @@ class ExamController extends Controller
 
         $section->create($data);
         $exam = Exam::findOrFail($data['exam_id']);
+        $exam->course()->syncWithoutDetaching($data['course_id']);
         return $this->sections($exam);
     }
 
@@ -145,6 +146,7 @@ class ExamController extends Controller
     {
         $section->delete();
         $exam = Exam::findOrFail($section->exam_id);
+        $exam->course()->detach($section->course_id);
         return $this->sections($exam);
 
     }
@@ -153,5 +155,44 @@ class ExamController extends Controller
     {
         $exam->department()->detach($department);
         return $exam->department;
+    }
+
+    public function exam_scores(Exam $exam)
+    {
+        $markedScores = [];
+        // $course_scores = [];
+        foreach($exam->course as $course) {
+            $queryQuestions = Course::find($course->id);
+            $questions = collect($queryQuestions->questions_to_mark);
+            // $course_scores[$key] = []
+            // $course_score = ['student_id' => '', 'exam_id' => $exam->id, 'course_id' => $course->id, 'total' => 0];
+
+            foreach($exam->attempts as $attempt) {
+                $marks = collect($questions)->where('id', $attempt->question_id);
+                
+                foreach($marks as $mark) {
+
+                    if($mark->answer === $attempt->stu_answer) {
+                        $attempt['score'] = 1;
+                    } else {
+                        $attempt['score'] = 0;
+                    }
+                    
+                    array_push($markedScores, $attempt);
+                }  
+           }
+        //    array_push($course_scores, $course_score);
+        }
+        // return $course_scores;
+        return $markedScores;
+        // student_id: 1
+        // exam_id: 1
+        // course_id: 1
+        // section_id: 1
+        // question_id: 1
+        // stu_answer: "B"
+        // $data = $exam->scores; $exam_sections = collect($exam->section)->where('section_id', $section->id);
+        // return $data;
+        // $data = $course->load('sections', 'questions');
     }
 }

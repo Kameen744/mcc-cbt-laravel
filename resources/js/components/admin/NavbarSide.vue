@@ -51,19 +51,19 @@
 
                 <!-- Nav Item - Pages Collapse Menu -->
                 <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" :data-target="`#collapse${key}`" aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span class="navtext">{{group.name}}</span>
-                </a>
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" :data-target="`#collapse${key}`" aria-expanded="true" aria-controls="collapseTwo">
+                        <i class="fas fa-fw fa-folder"></i>
+                        <span class="navtext">{{group.name}}</span>
+                    </a>
                     <div :id="`collapse${key}`" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">{{group.name}}:</h6>
-                        <div v-for="nav in navbars" :key="nav.id">
-                            <router-link v-if="nav.navgroup_id === group.id" 
-                            :to="`/${getNavName(nav.name)}`" class="collapse-item">
-                                {{nav.name}}
-                            </router-link>
-                        </div>
+                            <h6 class="collapse-header">{{group.name}}:</h6>
+                            <div v-for="nav in navbars" :key="nav.id">
+                                <router-link v-if="nav.navgroup_id === group.id" 
+                                :to="`/${getNavName(nav.name)}`" class="collapse-item">
+                                    {{nav.name}}
+                                </router-link>
+                            </div>
                         </div>
                     </div>
                 </li> 

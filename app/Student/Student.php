@@ -2,15 +2,18 @@
 
 namespace App\Student;
 
+use App\Cbt\ExamAtempt;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use JamesDordoy\LaravelVueDatatable\Traits\LaravelVueDatatableTrait;
+use Yadakhov\InsertOnDuplicateKey;
 
 class Student extends Authenticatable
 {
     use Notifiable;
     use LaravelVueDatatableTrait;
+    use InsertOnDuplicateKey;
     
     protected $dataTableColumns = [
         'id' => [
@@ -65,4 +68,10 @@ class Student extends Authenticatable
     // protected $casts = [
     //     'email_verified_at' => 'datetime',
     // ];
+    
+    // Students Attempts
+    public function attempts()
+    {
+        return $this->hasMany(ExamAtempt::class);
+    }
 }

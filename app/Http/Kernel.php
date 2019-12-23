@@ -54,6 +54,7 @@ class Kernel extends HttpKernel
         'authadm' => \App\Http\Middleware\Admin::class,
         'authlibadm' => \App\Http\Middleware\LibAdmin::class,
         'authstu' => \App\Http\Middleware\Student::class,
+        'authcbt' => \App\Http\Middleware\Cbt::class,
         'auth' => \App\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,

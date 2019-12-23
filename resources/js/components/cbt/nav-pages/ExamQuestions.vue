@@ -3,37 +3,40 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="row">
-                        <div class="col-md-3"> 
-                            <h4 class="card-title text-white">Questions</h4>
-                        </div>
-                        <div class="col-md-3">
-                            <select @change="getQuestions" class="float-right form-control form-control-sm" 
-                                name="course" id="course">
-                                <option selected disabled>Course</option>
-                                <option v-for="course in courses" :key="course.id" :value="course.id">
-                                    {{course.course}}
-                                </option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <select @change="getSectionQuestions" class="float-right form-control form-control-sm">
-                                <option selected disabled>Section</option>
-                                <option v-for="section in sections" :key="section.id" :value="section.id">
-                                    {{section.section}}
-                                </option>
-                            </select>
-                        </div>
+                    <div class="row d-flex justify-content-center">
+                        
+                        <select @change="getQuestions" class="m-1 col-md-2 form-control form-control-sm" 
+                            name="course" id="course">
+                            <option selected disabled>Course</option>
+                            <option v-for="course in courses" :key="course.id" :value="course.id">
+                                {{course.course}}
+                            </option>
+                        </select>
+                    
+                        <select @change="getSectionQuestions" class="m-1 col-md-2 form-control form-control-sm">
+                            <option selected disabled>Section</option>
+                            <option v-for="section in sections" :key="section.id" :value="section.id">
+                                {{section.section}}
+                            </option>
+                        </select>
+                        
                         <!-- <div class="col-md-2">
                             <button @click="showUploadModal" class="btn btn-success btn-sm">
                                <i class="fas fa-upload"></i> Upload Questions
                             </button>
                         </div> -->
-                        <div class="col-md-3">
+                       
+                        <div class="m-1 col-md-3">
                             <button @click="showQuestionModal(null)" type="button" 
-                                class="float-right btn btn-danger btn-sm">
-                                <i class="fas fa-plus-circle"></i> Add Question
-                            </button>
+                            class="float-right btn btn-danger btn-sm">
+                            <i class="fas fa-plus-circle"></i> Add Question
+                        </button>
+                        </div>
+                        <div class="m-1 col-md-3">
+                        <button @click="UploadQuestionsModal()" type="button" 
+                            class="btn btn-danger btn-sm ml-auto">
+                            <i class="fas fa-plus-circle"></i> Upload Questions
+                        </button>
                         </div>
                     </div>  
                     <table class="table table-striped table-bordered">
@@ -63,15 +66,16 @@
                 </div>
             </div>
         </div>
-         <!-- ------------------Question Modal--------------------->
+        <!-- ------------------Question Modal--------------------->
         <div class="modal swal2-show" id="questionModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header py-1">
                         <h5 v-show="!editQuestionMode" class="modal-title text-primary">Add New Question</h5>
                         <h5 v-show="editQuestionMode" class="modal-title text-warning">Edit Question</h5>
+
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="true"> &times;</span>
                         </button>
                     </div>
                     <form @submit.prevent=" editQuestionMode ? editQuestion() : newQuestion() ">
@@ -174,64 +178,91 @@
             </div>
         </div>
         <!-- -------------------uload questions modal -------------------- -->
-        <!-- <div class="modal swal2-show" id="uploadQuestionModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal swal2-modal swal2-show" id="uploadQuestionsModal" :key="uploadFormKey"
+        tabindex="1" role="dialog" ref="uploadModal"
+        aria-labelledby="modelTitleId" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header py-1">
-                        <h5 class="modal-title text-warning">Upload Questions</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <h5 class="text-dark">Upload Students</h5>
                     </div>
-                    <form @submit.prevent="uploadQuestion">
+                
+                    <div class="modal-body overflow-auto px-3 h-auto" ref="uploadContainer">
+                        <h6 v-if="uploadResponse" class="text-center text-danger">{{uploadResponse}}</h6>
                         <div class="row">
+                            <div class="filezone col-md-6">
+                                <input type="file" id="files" ref="files" 
+                                @change="handleFiles"/>
+                                <h6 class="text-center">
+                                  Drop your MS.Excel .XLSX files here or click to search.
+                                </h6>
+                            </div>
+
                             <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Select Course</label>
-                                    <select class="form-control form-control-sm" v-model="uploadForm.course_id" 
-                                    @change="getSections" :class="{ 'is-invalid': uploadForm.errors.has('course_id')}">
-                                        <option v-for="course in courses" :key="course.id" :value="course.id">
-                                            {{course.course}}
-                                        </option>
-                                    </select>
-                                    <has-error :form="uploadForm" field="course_id"></has-error>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Select Course</label>
+                                            <select class="form-control form-control-sm" v-model="uploadForm.course_id" 
+                                            @change="getSections" :class="{ 'is-invalid': uploadForm.errors.has('course_id')}">
+                                                <option v-for="course in courses" :key="course.id" :value="course.id">
+                                                    {{course.course}}
+                                                </option>
+                                            </select>
+                                            <has-error :form="uploadForm" field="course_id"></has-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Select Section</label>
+                                            <select class="form-control form-control-sm" v-model="uploadForm.section_id" 
+                                            :class="{ 'is-invalid': uploadForm.errors.has('section_id')}">
+                                                <option v-for="section in sections" :key="section.id" :value="section.id">
+                                                    {{section.section}}
+                                                </option>
+                                            </select>
+                                            <has-error :form="uploadForm" field="course_id"></has-error>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Select Section</label>
-                                    <select class="form-control form-control-sm" v-model="uploadForm.section_id" 
-                                    :class="{ 'is-invalid': uploadForm.errors.has('section_id')}">
-                                        <option v-for="section in sections" :key="section.id" :value="section.id">
-                                            {{section.section}}
-                                        </option>
-                                    </select>
-                                    <has-error :form="uploadForm" field="course_id"></has-error>
-                                </div>
+                                <button :disabled="uploadForm.busy" type="button" @click="uploadQuestions" 
+                                class="btn btn-danger btn-sm btn-lg btn-block">Upload</button>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="questions">Select File</label>
-                            <input @change="selectFile" type="file" class="form-control-file" name="questions" id="questions" placeholder="">
-                        </div>
-                        <div class="modal-footer py-1">
-                            <div class="form-group">
-                                <button  :disabled="uploadForm.busy" type="submit" class="btn btn-primary btn-sm">
-                                <i class="fas fa-upload"></i> Upload Question</button>
-                            </div>
-                        </div>
-                    </form>
+                        <div class="row">
+                            <table class="table table-bordered bg-gradient-primary" 
+                            v-if="uploadForm.questions[0]">
+                                <thead>
+                                    <tr>
+                                        <th v-for="(th_col, key) in uploadForm.questions[0].slice(0, 6)" 
+                                        :key="key">
+                                        </th>    
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(tr_data, tr_key) in uploadForm.questions" :key="tr_key"> 
+                                        <td v-for="(td_data, td_key) in tr_data.slice(0, 6)" 
+                                        :key="td_key" :class="!td_data ? 'bg-danger' : '' ">
+                                            {{td_data}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>    
+                    </div>
                 </div>
             </div>
-        </div> -->
+        </div>
                 
     </div>
 </template>
 <script>
+import readXlsxFile from 'read-excel-file';
 export default {
     data() {
         return {
             editQuestionMode: false,
+            uploadFormKey: true,
             form: new Form({
                 course_id: '',
                 section_id: '',
@@ -243,10 +274,11 @@ export default {
                 answer: ''
             }),
             uploadForm: new Form({
-                courses_id: '',
-                section_id: '',
-                file: null
+                course_id: null,
+                section_id: null,
+                questions: []
             }),
+            uploadResponse: null,
             courses: [],
             sections: [],
             sectionsSelect: [],
@@ -284,33 +316,33 @@ export default {
             });
             this.$Progress.finish();
         },
-        showUploadModal(){
-             $('#uploadQuestionModal').modal('show');
-        },
-        selectFile(e){
-            this.uploadForm.file = e.target.files[0];
-        },
-        uploadQuestion() {
-            this.uploadForm.post(`question`, {
+        // showUploadModal(){
+        //      $('#uploadQuestionModal').modal('show');
+        // },
+        // selectFile(e){
+        //     this.uploadForm.file = e.target.files[0];
+        // },
+        // uploadQuestion() {
+        //     this.uploadForm.post(`question`, {
               // Transform form data to FormData
-              transformRequest: [function (data, headers) {
-                return objectToFormData(data)
-              }],
-              onUploadProgress: e => {
-                this.$Progress.start();
-              }
-            })
-            .then(res => {
+            //   transformRequest: [function (data, headers) {
+            //     return objectToFormData(data)
+            //   }],
+            //   onUploadProgress: e => {
+            //     this.$Progress.start();
+            //   }
+            // })
+            // .then(res => {
                 // this.questions = res.data;
                 // Toast.fire({
                 //     type: 'success',
                 //     title: 'section saved successfully'
                 // });
                 // this.uploadForm.reset();
-                console.log(res.data);
-                 this.$Progress.finish();
-            });
-        },
+        //         console.log(res.data);
+        //          this.$Progress.finish();
+        //     });
+        // },
         editQuestion() {
             this.$Progress.start();
                 this.form.put(`/question/${this.form.id}`)
@@ -382,6 +414,35 @@ export default {
                 this.form.clear();
                 this.form.reset();
             }
+        },
+        UploadQuestionsModal() {
+            $('#uploadQuestionsModal').modal('show');
+        },
+        handleFiles(e) {
+            let file = e.target.files[0];
+            let loader = this.$loading.show({
+                container: this.$refs.uploadContainer,
+                canCancel: false,
+            });
+            readXlsxFile(file).then((rows) => {
+                this.uploadForm.questions = rows;
+                loader.hide();
+            });
+        },
+        uploadQuestions() {
+            this.$Progress.start();
+            this.uploadForm.post(`upload_question`)
+            .then(res => {
+                this.uploadResponse = res.data;
+                Toast.fire({
+                    type: 'success',
+                    title: 'section saved successfully'
+                });
+                $('#uploadQuestionsModal').modal('hide');
+                // this.uploadFormKey ? this.uploadFormKey = false : this.uploadFormKey = true;
+                this.uploadForm.reset();
+            });
+            this.$Progress.finish();
         }
     }
 }
@@ -396,7 +457,32 @@ export default {
     }
     .modal-lg {
     max-width: 80% !important;
-}
+    }
+    .modal-body {
+        max-height: 75vh;
+        overflow: hidden;
+        overflow-y: auto;
+    }
+    input[type="file"]{
+        opacity: 0;
+        width: 100%;
+        height: 70px;
+        position: absolute;
+        cursor: pointer;
+    }
+    .filezone {
+      outline: 2px dashed grey;
+      outline-offset: -10px;
+      background: #ccc;
+      color: dimgray;
+      padding: 10px 10px;
+      height: 70px;
+      position: relative;
+      cursor: pointer;
+    }
+    .filezone:hover {
+      background: #c0c0c0;
+    }
 </style>
 
 

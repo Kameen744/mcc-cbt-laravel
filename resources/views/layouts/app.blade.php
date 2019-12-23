@@ -9,6 +9,8 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body id="page-top" class="">
-    @yield('content')
+    <span class="vue-app">
+        @yield('content')
+    </span>
 </body>
 </html>

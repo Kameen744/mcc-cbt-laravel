@@ -223,4 +223,11 @@ export default {
     }
 }
 </script>
+<style scoped>
+    .modal-body {
+        max-height: 75vh;
+        overflow: hidden;
+        overflow-y: auto;
+    }
+</style>
 

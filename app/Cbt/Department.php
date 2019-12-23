@@ -27,17 +27,19 @@ class Department extends Model
             'searchable' => true,
         ]
     ];
-    
+    // department courses
     public function course()
     {
         return $this->hasMany(Course::class);
     }
 
+    // department exams 
     public function exam()
     {
-        return $this->belongsToMany(Exam::class, 'exam_department');
+        return $this->belongsToMany(Exam::class, 'exam_department')->withTimestamps();;
     }
 
+    // library boooks for department
     public function lib_res()
     {
         return $this->hasMany(LibResource::class);

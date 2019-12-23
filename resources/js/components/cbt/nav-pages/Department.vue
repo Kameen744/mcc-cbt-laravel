@@ -130,6 +130,7 @@ export default {
                         'btn': true,
                         'btn-danger': true,
                         'btn-sm': true,
+                        font: 'fas fa-eye'
                     },
                     event: "click",
                     handler: this.viewDepartment,

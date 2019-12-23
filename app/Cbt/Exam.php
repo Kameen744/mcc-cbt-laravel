@@ -4,6 +4,7 @@ namespace App\Cbt;
 
 use App\Cbt\Course;
 use App\Cbt\Department;
+use App\Cbt\ExamAtempt;
 use Illuminate\Database\Eloquent\Model;
 use JamesDordoy\LaravelVueDatatable\Traits\LaravelVueDatatableTrait;
 
@@ -46,6 +47,11 @@ class Exam extends Model
 
     public function section()
     {
-        return $this->hasMany(ExamSection::class)->orderBy('course_id');
+        return $this->hasMany(ExamSection::class);
+    }
+
+    public function attempts()
+    {
+        return $this->hasMany(ExamAtempt::class);
     }
 }

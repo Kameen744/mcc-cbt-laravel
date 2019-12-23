@@ -15,10 +15,10 @@
     
                             <div class="form-group">
                                 <input type="text" 
-                                class="form-control form-control-user shadow-lg @error('appnumber') is-invalid @enderror" 
+                                class="form-control form-control-user shadow-lg @error('app_number') is-invalid @enderror" 
                                 name="app_number" placeholder="Enter your application no..." value="{{ old('app_number') }}">
     
-                                @error('appnumber')
+                                @error('app_number')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>

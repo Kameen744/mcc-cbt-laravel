@@ -21,8 +21,6 @@ class StudentsLoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
-        // Auth::guard('student');
-        // $this->middleware('guest:student');
     }
 
     public function showLoginForm()
@@ -30,25 +28,20 @@ class StudentsLoginController extends Controller
         return view('students.login');
     }
 
-    public function login(request $request)
+    public function username()
     {
-    //   validate input
-        $credencials = $this->validate($request, [
-            'app_number' => 'required',
-            'password' => 'required|min:4'
-        ]);
-    // attempt login
-        // if (Auth::attempt(['email' => $email, 'password' => $password, 'active' => 1])) {
-        
-        // }
-        if(Auth::guard('student')->attempt($credencials)){
-            // if successefull redirect to admin dashboard
-            return redirect()->intended(route('student.dashboard'));
-        }
-    // else redirect to login page again
-        return redirect()->back()->withInput($request->only('app_number', 'remember'));
+        return 'app_number';
     }
 
+    protected function loggedOut()
+    {
+        return redirect('student/login');
+    }
+
+    protected function guard()
+    {
+        return Auth::guard('student');
+    }
 
     // public function login(Request $request)
     // {
@@ -121,15 +114,5 @@ class StudentsLoginController extends Controller
     // public function username()
     // {
     //     return 'appnumber';
-    // }
-
-    protected function loggedOut()
-    {
-        return redirect('student');
-    }
-
-    // protected function guard()
-    // {
-    //     return Auth::guard('student');
     // }
 }
