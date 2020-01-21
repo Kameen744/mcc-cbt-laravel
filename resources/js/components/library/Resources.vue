@@ -300,7 +300,7 @@ export default {
           if(this.form.res_files.length <= 1) {
             return alert('Two files required. PDF and JPG');
           }
-          this.form.post(`resource`, {
+          this.form.post(`library/resource`, {
             transformRequest: [function (data, headers) {
               return objectToFormData(data)
             }]

@@ -16,6 +16,7 @@ class CreateExamScoresTable extends Migration
         Schema::create('exam_scores', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('student_id');
+            $table->unsignedBigInteger('exam_id');
             $table->unsignedBigInteger('course_id');
             $table->integer('marks');
             $table->timestamps();

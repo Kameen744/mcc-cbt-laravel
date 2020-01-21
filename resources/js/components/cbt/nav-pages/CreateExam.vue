@@ -1,5 +1,5 @@
 <template>
-    <div class="card bg-gradient-primary border-left-success">
+    <div class="card bg-gradient-primary border-left-danger">
         <div class="card-body">
             <div class="row">
                 <div class="col-md-12">

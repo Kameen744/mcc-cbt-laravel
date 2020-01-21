@@ -5,14 +5,21 @@ namespace App\Http\Controllers\Cbt;
 
 use App\Cbt\Course;
 use Illuminate\Http\Request;
+use App\CustomClasses\Permited;
 use App\CustomClasses\DataTableRes;
 use App\Http\Controllers\Controller;
 
 class CourseController extends Controller
 {
+    
     public function __construct() 
     {
         $this->middleware('authadm:admin');
+    }
+
+    public function abort_if_not_permited() 
+    {
+        abort_unless(Permited::check('Courses'), 403);
     }
     /**
      * Display a listing of the resource.
@@ -21,6 +28,7 @@ class CourseController extends Controller
      */
     public function index(Request $request, DataTableRes $DataTable, Course $course)
     {
+        $this->abort_if_not_permited();
         return $DataTable->get_collections($request, $course);
     }
 
@@ -32,6 +40,7 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
+        $this->abort_if_not_permited();
         $this->validate($request, [
             'course' => 'required|min:3'
         ]);
@@ -64,6 +73,7 @@ class CourseController extends Controller
      */
     public function update(Request $request, course $course)
     {
+        $this->abort_if_not_permited();
         $this->validate($request, ['course' => 'required|min:3']);
 
         $course->update(request(['course']));
@@ -78,6 +88,7 @@ class CourseController extends Controller
      */
     public function destroy(course $course)
     {
+        $this->abort_if_not_permited();
         $course->delete();
         return Course::all();
     }

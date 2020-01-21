@@ -36,7 +36,8 @@ class DefaultNavs extends Command
         try {
             $admin = Admin::create([
                 'username' => 'Kamal',
-                'password' => Hash::make('kameen') 
+                'password' => Hash::make('kameen'),
+                'supervisor' => 1 
             ]);
             $groups = [
                 ['name' => 'Department'],

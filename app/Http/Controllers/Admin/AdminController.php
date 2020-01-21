@@ -36,6 +36,7 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Admin::class);
         $data = $this->validate($request, [
             'username' => 'required',
             'password' => 'required'
@@ -53,7 +54,8 @@ class AdminController extends Controller
      */
     public function show(admin $admin)
     {
-       return $admin;
+        $this->authorize('view', $admin);
+        return $admin;
     }
 
     /**
@@ -65,13 +67,17 @@ class AdminController extends Controller
      */
     public function update(Request $request, admin $admin)
     {
+        $this->authorize('update', $admin);
         $data = $this->validate($request, [
             'username' => 'required',
             'password' => 'required'
         ]);
-        $data['password'] =  Hash::make($request->password);
-        
-        $admin->update($data);
+        if($data['password'] === $admin->password) {
+            $admin->update(['username' => $data['username']]);
+        } else {
+            $data['password'] =  Hash::make($request->password);
+            $admin->update($data);
+        }
     }
 
     /**
@@ -82,11 +88,14 @@ class AdminController extends Controller
      */
     public function destroy(admin $admin)
     {
+        $this->authorize('delete', $admin);
         $admin->delete();
+        $admin->navbar()->Detach();
     }
 
     public function get_admins(Request $request, DataTableRes $DataTable, Admin $admin)
     {
+        $this->authorize('view', $admin);
         return $DataTable->get_collections($request, $admin);
     }
 
@@ -107,6 +116,7 @@ class AdminController extends Controller
 
     public function add_permission(Request $request, Admin $admin) 
     {
+        $this->authorize('delete', $admin);
         $data = $this->validate($request, [
             'admin_id' => 'required',
             'navbar_id' => 'required'
@@ -118,6 +128,7 @@ class AdminController extends Controller
 
     public function delete_permission (Request $request, Admin $admin)
     {
+        $this->authorize('delete', $admin);
         $data = $this->validate($request, [
             'admin_id' => 'required',
             'navbar_id' => 'required'

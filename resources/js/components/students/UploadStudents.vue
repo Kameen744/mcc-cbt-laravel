@@ -9,12 +9,20 @@
                         </div>
                         <div class="flex-grow-1">
                             <button @click="showModal('upload')" type="button" 
-                            class="btn btn-danger btn-sm float-right mx-2 ">
+                            class="btn btn-danger btn-sm float-right mx-1">
                             <i class="fas fa-plus-circle"></i> Upload Students</button>
 
                             <button @click="showModal(null)" type="button" 
-                            class="btn btn-danger btn-sm float-right">
+                            class="btn btn-danger btn-sm float-right mx-1">
                             <i class="fas fa-plus-circle"></i> Add Student</button>
+
+                            <button
+                                @click="printPasswords"
+                                type="button"
+                                class="btn btn-danger btn-sm float-right mx-1"
+                            >
+                                <i class="fas fa-print"></i> Print Passwords
+                            </button>
                         </div>
                     </div>
                     <div class="col-12 p-0 mb-1"><hr class="p-0 m-0 bg-white"></div>
@@ -244,11 +252,68 @@
                 </div>
             </div>
         </div>
+        <!-- -------------------Print passwores modal ----------------- -->
+        <div
+        class="modal swal2-show"
+        id="printPasswordsModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="modelTitleId"
+        aria-hidden="true"
+        >
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                <div class="modal-header py-1 d-flex justify-content-between">
+                    <h4 class="text-dark">Print Passwords</h4>
+                    <div class="form-group">
+                    <select class="form-control form-control-sm" @change="getDepartmentStudents">
+                        <option>Select Department</option>
+                        <option v-for="department in departments" 
+                        :key="department.id" :value="department.id">
+                            {{department.department}}
+                        </option>
+                    </select>
+                    </div>
+                    <div class="form-group" v-if="departmentStudents">
+                        <button type="button" class="btn btn-primary btn-sm" @click="printDoc">Print 
+                            <i class="fas fa-print"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-12 bg-gradient-primary passwordsArea" 
+                v-if="departmentStudents" ref="passwordsArea">
+                    <h4 class="text-center">{{departmentStudents.department}}</h4>
+                    <hr>
+                    <table class="table table-striped table-inverse">
+                        <thead class="thead-inverse">
+                            <tr>
+                                <th>S/N</th>
+                                <th>Application No.</th>
+                                <th>Name</th>
+                                <th>Gender</th>
+                                <th>Password</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(student, key) in departmentStudents.student" :key="key">
+                                    <td>{{key +1}}</td>
+                                    <td>{{student.app_number}}</td>
+                                    <td>{{student.fullname}}</td>
+                                    <td>{{student.gender}}</td>
+                                    <td>{{student.vn_number}}</td>
+                                </tr>
+                            </tbody>
+                    </table>
+                </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
 import readXlsxFile from 'read-excel-file';
+import Printd from "printd";
 export default {
     data() {
         return {
@@ -334,7 +399,8 @@ export default {
             }),
             departments: [], 
             Student: Object,
-            uploadResponse: ''
+            uploadResponse: '',
+            departmentStudents: null
         }
     },
     created() {
@@ -445,6 +511,43 @@ export default {
                 this.form.reset();
                 this.form.clear();
             } 
+        },
+        printPasswords() {
+            $('#printPasswordsModal').modal('show');
+        },
+        getDepartmentStudents(e) {
+            axios.get(`get_department_students/${e.target.value}`)
+            .then(res => {
+                this.departmentStudents = res.data;
+            });
+        },
+        printDoc() {
+        this.print = !this.print;
+        const cssText = `
+            table {
+                    color:black;
+                    border-collapse: collapse;
+                    width: 100%;
+                }
+                th {
+                    color:#810412;
+                    height: 30px;
+                    padding-top: 2px;
+                    padding-bottom: 1px;
+                }
+                tr:nth-child(even) {
+                    background-color: #f2f2f2;
+                }
+                td {
+                    height: 20px;
+                    padding: 2px;
+                }
+                table, th, td {
+                    border: 1px solid black;
+                }
+            `;
+            const d = new Printd();
+            d.print(this.$refs.passwordsArea, [cssText]);
         }
     }
 }
@@ -473,6 +576,10 @@ export default {
     }
     .filezone:hover {
       background: #c0c0c0;
+    }
+    .passwordsArea {
+        max-height: 400px;
+        overflow-y: auto;
     }
 </style>
 

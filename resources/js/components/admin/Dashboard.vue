@@ -1,5 +1,5 @@
 <template>
-       <navbar-side :username="currentUser.username"
+       <navbar-side :currentUser="currentUser"
        :logout="logout">
        </navbar-side>
 </template>

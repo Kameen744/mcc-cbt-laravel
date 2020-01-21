@@ -1,22 +1,28 @@
 table {
-    color:white !important;
+    color: white !important;
 }
+
 th {
-    color:#810412 !important;
+    color: #810412 !important;
     background: white !important;
 }
-td p{
+
+td p {
     padding: 0px !important;
     margin: 0px !important;
 }
-th,td {
+
+th,
+td {
     padding-top: 2px !important;
     padding-bottom: 1px !important;
 }
+
 p {
     padding: 0px;
     margin: 0px;
 }
+
 .ql-align-justify {
     text-align: left;
 }

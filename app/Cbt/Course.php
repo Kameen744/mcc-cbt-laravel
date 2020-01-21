@@ -4,7 +4,7 @@ namespace App\Cbt;
 
 use App\Cbt\Exam;
 use App\Cbt\Question;
-use App\Cbt\ExamAtempt;
+use App\Cbt\ExamScore;
 use App\Cbt\CourseSection;
 use Illuminate\Database\Eloquent\Model;
 use JamesDordoy\LaravelVueDatatable\Traits\LaravelVueDatatableTrait;
@@ -55,8 +55,8 @@ class Course extends Model
         return $this->belongsToMany(Exam::class, 'exams_courses')->withTimestamps();
     }
 
-    // public function scores()
-    // {
-    //     return $this->hasMany(ExamAtempt::class);
-    // }
+    public function score()
+    {
+        return $this->hasMany(ExamScore::class, 'course_id');
+    }
 }

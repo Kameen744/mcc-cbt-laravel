@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Cbt;
 use App\Cbt\Exam;
 use App\Cbt\Course;
 use App\Cbt\Question;
+use App\Cbt\ExamScore;
 use App\Cbt\Department;
 use App\Cbt\ExamAtempt;
 use App\Student\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Events\studentAttemptsEvent;
 use App\Http\Controllers\Controller;
 
 class CbtController extends Controller
@@ -110,7 +112,8 @@ class CbtController extends Controller
         $randomise_questions = [];
         // get all course sections and questions
         $data = $course->load('sections', 'questions');
-       
+        // collect sections of the current course
+        $exam_sections = collect($exam->section)->where('course_id', $course->id);
         // check if student has attempted questions before on this exam
         $stu_attempt = $student->attempts()->where([
             'exam_id' => $exam->id, 
@@ -118,7 +121,7 @@ class CbtController extends Controller
         ])->get();
 
             // loop through current exam sections
-            foreach($exam->section as $exam_section) {
+            foreach($exam_sections as $exam_section) {
                 
                 // pick current exam section questions only
                 $section_questions = collect($data->questions)->where('section_id', $exam_section->section_id);
@@ -187,36 +190,6 @@ class CbtController extends Controller
 
     public function attempt(Request $request)
     {   
-
-        $data = [];
-    
-        foreach($request->input('attempts') as $row) {
-            // find attempt
-            $findMatch = ExamAtempt::where([
-                'student_id' => $row['student_id'],
-                'question_id' => $row['question_id'],
-            ]);
-
-            // find question and compare the answer with student attempt
-            Question::find($row['question_id'])->answer === $row['stu_attempt'] ?
-            $row['stu_mark'] = 1 : $row['stu_mark'] = 0;
-        
-            // if question attempted update it else create new attempt
-            if(count($findMatch->get()) > 0) {
-                $row['updated_at'] = Carbon::now();
-                $findMatch->update($row);
-            } else {
-                $row['created_at'] = Carbon::now();
-                $row['updated_at'] = Carbon::now();
-                array_push($data, $row);
-            }
-        }
-        
-        try {
-            DB::table('exam_atempts')->insert($data);
-            return 'success';
-        } catch (\Throwable $th) {
-           return $th;
-        }
+        event(new studentAttemptsEvent($request->input('attempts')));
     }
 }

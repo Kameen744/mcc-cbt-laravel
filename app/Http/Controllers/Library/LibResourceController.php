@@ -10,12 +10,18 @@ use App\Library\LibResourceType;
 use App\CustomClasses\DataTableRes;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
+use App\CustomClasses\Permited;
 
 class LibResourceController extends Controller
 {
     public function __construct() 
     {
         $this->middleware('authadm:admin');
+    }
+
+    public function abort_if_not_permited() 
+    {
+        abort_unless(Permited::check('Resources'), 403);
     }
      /**
      * Display a listing of the resource.
@@ -24,12 +30,10 @@ class LibResourceController extends Controller
      */
     public function index(Request $request, DataTableRes $DataTable, LibResource $LibRes)
     {
+        $this->abort_if_not_permited();
         return $data = $DataTable->get_collections($request, $LibRes);
     }
 
-    public function valid($request) {
-        
-    }
     /**
      * Store a newly created resource in storage.
      *
@@ -38,6 +42,7 @@ class LibResourceController extends Controller
      */
     public function store(Request $request)
     {
+        $this->abort_if_not_permited();
         $data = $this->validate($request, [
             'res_files' => 'required',
             'res_files.*' => 'mimes:jpg,png,jpeg,pdf',
@@ -84,6 +89,7 @@ class LibResourceController extends Controller
      */
     public function update(Request $request, LibResource $resource)
     {
+        $this->abort_if_not_permited();
         $data = $this->validate($request, [
             'res_title' => 'required',
             'res_subject'    => 'required',
@@ -115,6 +121,7 @@ class LibResourceController extends Controller
      */
     public function destroy(LibResource $resource)
     {
+        $this->abort_if_not_permited();
         $folder = LibResourceType::find($resource->res_type_id)->res_type;
 
         Storage::disk('library')->delete($folder.'/' .$resource->res_files);

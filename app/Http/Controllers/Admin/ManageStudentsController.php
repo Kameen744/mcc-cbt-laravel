@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use Carbon\Carbon;
-use App\Student\Student;
+use App\Cbt\Department;
 // use App\ExcelImport\XlsxImport;
+use App\Student\Student;
 use Illuminate\Http\Request;
 use App\CustomClasses\DataTableRes;
 use App\Http\Controllers\Controller;
@@ -95,7 +96,7 @@ class ManageStudentsController extends Controller
                 'state_of_origin'   => 'required',
                 'lga_of_origin'     => 'required',
                 'email'             => 'required',
-                'phone'             => 'required',
+                'phone'             => 'required', 
                 'mode_of_entry'     => 'required',
                 'first_choice'      => 'required',
                 'second_choice'     => 'required',
@@ -116,9 +117,7 @@ class ManageStudentsController extends Controller
                 return 'Invalid student form';
             }
 
-        }
-       
-        
+        } 
     }
 
     /**
@@ -182,5 +181,9 @@ class ManageStudentsController extends Controller
     {
         $student->delete();
         return '';
+    }
+
+    public function get_department_students(Department $department) {
+        return $department->load('student');
     }
 }

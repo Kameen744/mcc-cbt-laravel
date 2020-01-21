@@ -5,6 +5,7 @@ namespace App\Cbt;
 use App\Cbt\Course;
 use App\Cbt\Department;
 use App\Cbt\ExamAtempt;
+use App\Student\Student;
 use Illuminate\Database\Eloquent\Model;
 use JamesDordoy\LaravelVueDatatable\Traits\LaravelVueDatatableTrait;
 
@@ -21,18 +22,18 @@ class Exam extends Model
         'exam' => [
             'searchable' => true,
         ],
-        'exam_date' => [
-            'searchable' => true,
-        ],
-        'exam_time' => [
-            'searchable' => true,
-        ],
-        'started' => [
-            'searchable' => true,
-        ],
-        'created_at' => [
-            'searchable' => true,
-        ]
+        // 'exam_date' => [
+        //     'searchable' => true,
+        // ],
+        // 'exam_time' => [
+        //     'searchable' => true,
+        // ],
+        // 'started' => [
+        //     'searchable' => true,
+        // ],
+        // 'created_at' => [
+        //     'searchable' => true,
+        // ]
     ];
 
     public function department()
@@ -53,5 +54,10 @@ class Exam extends Model
     public function attempts()
     {
         return $this->hasMany(ExamAtempt::class);
+    }
+
+    public function scores()
+    {
+        return $this->hasMany(ExamScore::class);
     }
 }

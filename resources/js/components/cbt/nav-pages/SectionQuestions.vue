@@ -1,6 +1,6 @@
 <template>
     <div>
-       <div class="card text-white bg-gradient-primary border-left-info">
+       <div class="card text-white bg-gradient-primary border-left-danger">
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-12">

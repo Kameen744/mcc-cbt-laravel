@@ -9,9 +9,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class AdminLoginController extends Controller
 {
-
     use AuthenticatesUsers;
-
     // redirect after login
     protected $redirectTo = 'admin';
     

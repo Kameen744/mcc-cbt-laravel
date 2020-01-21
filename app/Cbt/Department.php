@@ -3,6 +3,7 @@
 namespace App\Cbt;
 
 use App\Cbt\Course;
+use App\Student\Student;
 use App\Library\LibResource;
 use Illuminate\Database\Eloquent\Model;
 use JamesDordoy\LaravelVueDatatable\Traits\LaravelVueDatatableTrait;
@@ -43,5 +44,10 @@ class Department extends Model
     public function lib_res()
     {
         return $this->hasMany(LibResource::class);
+    }
+
+    public function student()
+    {
+        return $this->hasMany(Student::class);
     }
 }

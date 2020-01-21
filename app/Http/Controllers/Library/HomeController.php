@@ -27,34 +27,23 @@ class HomeController extends Controller
     //     return $DataTable->get_collections($request, $LibRes);
     // }
 
-    public function get_resource($take = 15)
+    public function get_resource()
     {
-        // $exc = null;
+        return LibResource::paginate();
+    }
 
-        // $types = LibResourceType::all();
-        // for($i=0; $i<count($types); $i++) {
-        //     $exc = $res->where('res_type_id', $types[$i])->take($take)
-        //     ->union()
-        // }
-        
-        
-            // $book = LibResource::first();
-            // $file = storage_path().'/app/public/library/Books/' .$book->res_files;
-            // $handle = file_get_contents($file);
-            // //  Pdf::getText();
-            // $read = file_get_contents($file);
-            // dd($handle);
-            // dd(base_path());
-        $resources = LibResource::paginate($take);
-        $resources['resource_path'] = base_path();
-        // dd($resources);
-        return $resources;
-        // $type1 = Model::whereType(1)->take($take);
-        // $type2 = Model::whereType(2)->take($take);
-        // $type3 = Model::whereType(3)->take($take);
+    public function get_resource_by_type(LibResourceType $res_type)
+    {
+        return $res_type->lib_res()->paginate();   
+    }
 
-        // $types = $type1->union($type2)->union($type3)->get();
-        
+    public function get_resource_by_search($search_text) 
+    {
+        // res_title, res_author, res_subject
+       return LibResource::where('res_title', 'like', '%' .$search_text .'%') 
+            -> orWhere('res_author', 'like', '%' .$search_text .'%')
+            -> orWhere('res_subject', 'like', '%' .$search_text .'%')
+            -> paginate();
     }
 
     /**

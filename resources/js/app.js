@@ -19,6 +19,7 @@ import Swal from "sweetalert2";
 import VueEditor from "vue2-editor";
 import objectToFormData from "./objectodata";
 import DataTable from "laravel-vue-datatable";
+import excel from "vue-excel-export";
 
 import Loading from "vue-loading-overlay";
 
@@ -32,7 +33,6 @@ window.objectToFormData = objectToFormData;
 
 import VueRouter from "vue-router";
 
-Vue.use(Loading);
 // Layouts
 import Settings from "./components/Settings.vue";
 import NavbarTop from "./components/nav/NavbarTop.vue";
@@ -42,6 +42,7 @@ import InputTag from "./components/tags/InputTag.vue";
 // Admin
 import Dashboard from "./components/admin/Dashboard.vue";
 import NavbarSide from "./components/admin/NavbarSide.vue";
+import AdminSettings from "./components/admin/AdminSettings.vue";
 import StaffPermission from "./components/admin/StaffPermission.vue";
 
 // Students
@@ -62,7 +63,8 @@ import Calculator from "./components/cbt/CalculatorComp.vue";
 import ExamTimer from "./components/cbt/ExamTimer.vue";
 import QuestionOptions from "./components/cbt/exam-elem/QuestOptions.vue";
 import QuestionsNo from "./components/cbt/exam-elem/QuestionsNo.vue";
-import ExamResult from "./components/cbt/ExamResult.vue";
+import ExamResult from "./components/cbt/nav-pages/ExamResult.vue";
+import ResultTable from "./components/cbt/exam-elem/ResultTable.vue";
 
 // Library
 import LibHome from "./components/library/LibHome.vue";
@@ -75,9 +77,8 @@ import ReadResource from "./components/library/Read.vue";
 import Books from "./components/library/Books.vue";
 // import Viewer from './components/library/Viewer.vue';
 
-Vue.component(HasError.name, HasError);
-Vue.component(AlertError.name, AlertError);
-
+Vue.use(Loading);
+Vue.use(excel);
 Vue.use(VueProgressBar, {
     color: "#0f442e",
     failedColor: "#810412",
@@ -106,6 +107,10 @@ window.Toast = Toast;
 window.DataButtonVue = DataButtonVue;
 
 const routes = [{
+        path: "/admin-settings",
+        component: AdminSettings
+    },
+    {
         path: "/departments",
         component: Department
     },
@@ -188,6 +193,9 @@ Vue.use(VueRouter);
 // Vue.component('staff-permission', StaffPermission);
 // Vue.component('upload-students', UploadStudents);
 
+Vue.component(HasError.name, HasError);
+Vue.component(AlertError.name, AlertError);
+
 Vue.component("navbar-side", NavbarSide);
 Vue.component("navbar-top", NavbarTop);
 Vue.component("admin-dashbaord", Dashboard);
@@ -206,6 +214,7 @@ Vue.component("calculator", Calculator);
 Vue.component("exam-timer", ExamTimer);
 Vue.component("question-option", QuestionOptions);
 Vue.component("question-no", QuestionsNo);
+Vue.component("result-table", ResultTable);
 // Library
 Vue.component("library-home", LibHome);
 Vue.component("libadmin-dashbaord", LibDashboard);

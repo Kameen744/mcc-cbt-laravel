@@ -1,0 +1,11 @@
+.animate-text span {
+    opacity: 0;
+    transition: all 0.5s ease;
+    transform: translateY(50px);
+    display: inline-block;
+}
+
+.animate-text span.fade-text {
+    opacity: 1;
+    transform: translateY(0px);
+}

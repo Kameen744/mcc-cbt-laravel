@@ -6,6 +6,7 @@ use App\Cbt\Course;
 use App\Cbt\Question;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use App\CustomClasses\Permited;
 use App\Imports\QuestionImport;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
@@ -16,15 +17,17 @@ class QuestionController extends Controller
     {
         $this->middleware('authadm:admin');
     }
+
+    public function abort_if_not_permited() 
+    {
+        abort_unless(Permited::check('Exam Questions'), 403);
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        //
-    }
 
     private function validateData($request)
     {
@@ -44,6 +47,7 @@ class QuestionController extends Controller
 
     public function store(Request $request)
     {
+        $this->abort_if_not_permited();
         if($request->file('file')){
             $data = Excel::toArray(new QuestionImport, $request->file('file'));
             return $data;
@@ -59,18 +63,6 @@ class QuestionController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\question  $question
-     * @return \Illuminate\Http\Response
-     */
-    public function show(question $question)
-    {
-        //
-    }
-
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -79,6 +71,7 @@ class QuestionController extends Controller
      */
     public function update(Request $request, question $question)
     {
+        $this->abort_if_not_permited();
         $data = $this::validateData($request);
         $question->update($data);
         return Course::find($request->course_id)->questions;
@@ -92,6 +85,7 @@ class QuestionController extends Controller
      */
     public function destroy(question $question)
     {
+        $this->abort_if_not_permited();
         $question->delete();
         return Course::find($question->course_id)
         ->questions()->where('section_id', $question->section_id)
@@ -101,6 +95,7 @@ class QuestionController extends Controller
     // upload questions
     public function upload_question(Request $request)
     {
+        $this->abort_if_not_permited();
         $this->validate($request, [
             'course_id' => 'required',
             'section_id' => 'required'
@@ -131,8 +126,8 @@ class QuestionController extends Controller
             }
 
             try {
-                    Question::insert($insertData);
-                    return 'Successfully uploaded ' .count($insertData) .' questions';
+                Question::insert($insertData);
+                return 'Successfully uploaded ' .count($insertData) .' questions';
             } catch (\Throwable $th) {
                 return 'There\'s a duplicate or empty column in your file';
             }

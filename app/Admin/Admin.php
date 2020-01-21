@@ -27,7 +27,7 @@ class Admin extends Authenticatable
     ];
 
     protected $fillable = [
-        'username', 'password',
+        'username', 'password', 'supervisor'
     ];
 
     public function navbar()

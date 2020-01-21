@@ -2,12 +2,13 @@
 
 namespace App\Student;
 
+use App\Cbt\ExamScore;
 use App\Cbt\ExamAtempt;
+use Yadakhov\InsertOnDuplicateKey;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use JamesDordoy\LaravelVueDatatable\Traits\LaravelVueDatatableTrait;
-use Yadakhov\InsertOnDuplicateKey;
 
 class Student extends Authenticatable
 {
@@ -73,5 +74,14 @@ class Student extends Authenticatable
     public function attempts()
     {
         return $this->hasMany(ExamAtempt::class);
+    }
+
+    // public function exams() {
+    //     return $this->belongsToMany(Exam::class, 'student_exams');
+    // }
+
+    public function scores()
+    {
+        return $this->hasMany(ExamScore::class, 'student_id');
     }
 }

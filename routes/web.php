@@ -14,6 +14,8 @@
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+// --------Public Home page-----------
+Route::get('/', 'HomeController@index');
 
 // CBT admin routes
 Route::get('admin',                             
@@ -110,13 +112,10 @@ Route::get('exam/{exam}/{course}',
 Route::resource('exam', 
 'Cbt\ExamController', ['except' => ['edit', 'create']]);
 
-Route::get('exam_scores/{exam}', 'Cbt\ExamController@exam_scores');
-// --------Public Home page-----------
-Route::get('/', 'HomeController@index');
-// Route::get('/', 'Auth\StudentsLoginController@ShowLoginForm')->name('student');
+Route::get('department_exams/{department}', 'Cbt\ExamController@department_exams');
+Route::get('exam_scores/{department}/{exam}', 'Cbt\ExamController@exam_scores');
 
 // --------Exam / login -----------
-
 Route::get('cbt', 'Cbt\CbtController@index')->name('exam');
 
 Route::get('cbt/login', 'Cbt\CbtLoginController@showLoginForm')->name('exam.login.form');
@@ -151,6 +150,8 @@ Route::get('student/logout',
 
 // -----------students Resource ---------------------
 Route::get('get_students', 'Admin\ManageStudentsController@index');
+Route::get('get_department_students/{department}', 
+'Admin\ManageStudentsController@get_department_students');
 Route::post('student', 'Admin\ManageStudentsController@store');
 Route::put('student/{student}', 'Admin\ManageStudentsController@update');
 Route::delete('student/{student}', 'Admin\ManageStudentsController@destroy');
@@ -160,7 +161,8 @@ Route::get('library',
 'Library\HomeController@index')->name('lib.home');
 
 Route::get('library/get_resources', 'Library\HomeController@get_resource');
-
+Route::get('library/get_resources/by_type/{res_type}', 'Library\HomeController@get_resource_by_type');
+Route::get('library/get_resources/by_search/{search_text}', 'Library\HomeController@get_resource_by_search');
 // Route::get('library/admin', 
 // 'Library\Admin\HomeController@index')->name('lib.admin.dashboard');
 

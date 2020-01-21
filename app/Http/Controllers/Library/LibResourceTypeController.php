@@ -10,12 +10,18 @@ use App\CustomClasses\DataTableRes;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use App\CustomClasses\Permited;
 
 class LibResourceTypeController extends Controller
 {
     public function __construct() 
     {
         $this->middleware('authadm:admin')->except('index');
+    }
+
+    public function abort_if_not_permited() 
+    {
+        abort_unless(Permited::check('Resource Type'), 403);
     }
     /**
      * Display a listing of the resource.
@@ -35,6 +41,7 @@ class LibResourceTypeController extends Controller
      */
     public function store(Request $request)
     {   
+        $this->abort_if_not_permited();
         $data = $this->validate($request, [
             'res_type' => 'required|string|unique:lib_resource_types,res_type|not_regex:~\W~'
         ]);
@@ -61,6 +68,7 @@ class LibResourceTypeController extends Controller
      */
     public function update(Request $request, LibResourceType $res_type)
     {
+        $this->abort_if_not_permited();
         $data = $this->validate($request, [
             'res_type' => 'required'
         ]);
@@ -86,7 +94,8 @@ class LibResourceTypeController extends Controller
      */
     public function destroy(LibResourceType $res_type)
     {
-        File::deleteDirectory($res_type->path);
+        $this->abort_if_not_permited();
+        File::deleteDirectory(storage_path().'/app/public/' .$res_type->path);
         $res_type->delete();
         return $res_type;
     }

@@ -13,7 +13,7 @@ class ResetTable extends Migration
      */
     public function up()
     {
-         Schema::dropIfExists('exam_atempts');
+        Schema::dropIfExists('admins');
     }
 
     /**
@@ -21,18 +21,15 @@ class ResetTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down() 
     {
-        Schema::create('exam_atempts', function (Blueprint $table) {
+        Schema::create('admins', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('student_id');
-            $table->unsignedBigInteger('exam_id');
-            $table->unsignedBigInteger('course_id');
-            $table->unsignedBigInteger('section_id');
-            $table->unsignedBigInteger('question_id');
-            $table->string('stu_attempt');
-            $table->integer('stu_mark');
+            $table->string('username');
+            $table->string('password');
+            $table->boolean('supervisor')->default(0);
             $table->timestamps();
         });
     }
 }
+// $2y$10$1RxLwuM1L7L.u7X6YlmXMOPpPCVPTjeUjqATJZwnaUDyOPu1iPjVa

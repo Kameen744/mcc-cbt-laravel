@@ -17,6 +17,7 @@ class CreateAdminsTable extends Migration
             $table->bigIncrements('id');
             $table->string('username');
             $table->string('password');
+            $table->boolean('supervisor')->default(0);
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class CreateAdminsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('admins');
+        Schema::dropIfExists('admin');
     }
 }
