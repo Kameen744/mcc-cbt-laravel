@@ -128,6 +128,7 @@ Route::get('cbt/logout', 'Cbt\CbtLoginController@logout')->name('exam.logout');
 
 Route::get('get_exams/{department}', 'Cbt\CbtController@get_exams');
 route::get('get_exam_start_time/{student}', 'Cbt\CbtController@get_exam_start_time');
+route::get('set_exam_finish_time/{student}', 'Cbt\CbtController@set_exam_finish_time');
 Route::get('get_course_questions/{student}/{exam}/{course}', 'Cbt\CbtController@get_course_questions');
 Route::post('get_attempted', 'Cbt\CbtController@get_attempted');
 

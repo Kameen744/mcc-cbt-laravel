@@ -121,15 +121,19 @@ class CbtController extends Controller
             return $student->examTime;
         }
 
-        StuExamTime::create([
+        $examTime = StuExamTime::create([
             'student_id' => $student->id,
             'start_time' => now()
         ]);
+
+        return $examTime;
     }
 
     public function set_exam_finish_time(Student $student) 
     {
-        $student->examTime->update(['finish_time' => now()]);
+        // $student->examTime->update();
+        $exam = StuExamTime::where('student_id', $student->id)->first();
+        $exam->update(['finish_time' => now()]);
     }
     
     public function get_course_questions(Student $student, Exam $exam, Course $course)

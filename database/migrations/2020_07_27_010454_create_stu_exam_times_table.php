@@ -16,8 +16,8 @@ class CreateStuExamTimesTable extends Migration
         Schema::create('stu_exam_times', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('student_id');
-            $table->timestamp('start_time');
-            $table->timestamp('finish_time')->nullable();
+            $table->dateTime('start_time');
+            $table->dateTime('finish_time')->nullable();
             $table->timestamps();
         });
         Schema::table('stu_exam_times', function (Blueprint $table) {

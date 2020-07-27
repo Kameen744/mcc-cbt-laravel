@@ -237,9 +237,11 @@ export default {
   },
   methods: {
     timerEnds() {
-      this.submitAttempt();
-      this.timeHasFinish = true;
-      this.examStart = false;
+      axios.get(`set_exam_finish_time/${this.currentUser.id}`).then((res) => {
+        this.submitAttempt();
+        this.timeHasFinish = true;
+        this.examStart = false;
+      });
     },
     setExamTimer() {
       // let startDate = new Date(
@@ -253,7 +255,7 @@ export default {
         startDate.getMinutes() + this.currentExam.exam_minutes
       );
 
-      let time = Date.parse(new Date(finishDate)) - Date.parse(new Date());
+      let time = Date.parse(new Date(finishDate)) - Date.parse(startDate);
       if (time > 0) {
         this.startTime = startDate;
         this.endTime = finishDate;
