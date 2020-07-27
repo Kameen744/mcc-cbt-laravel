@@ -4,6 +4,8 @@ namespace App\Student;
 
 use App\Cbt\ExamScore;
 use App\Cbt\ExamAtempt;
+use App\Cbt\Recommendation;
+use App\Student\StuExamTime;
 use Yadakhov\InsertOnDuplicateKey;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -83,5 +85,13 @@ class Student extends Authenticatable
     public function scores()
     {
         return $this->hasMany(ExamScore::class, 'student_id');
+    }
+
+    public function recommendation() {
+        return $this->hasOne(Recommendation::class);
+    }
+
+    public function examTime() {
+        return $this->hasOne(StuExamTime::class);
     }
 }

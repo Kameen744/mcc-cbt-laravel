@@ -11,16 +11,28 @@
         Download Excel
         <i class="fas fa-file-excel"></i>
       </export-excel>
-      <button type="button" class="btn btn-success btn-sm ml-auto" @click="printDoc">
-        Print
-        <i class="fas fa-print"></i>
-      </button>
+      <div>
+        <button type="button" class="btn btn-primary btn-sm ml-auto" @click="expandTable">
+          <span v-if="print">
+            Collapse Table
+            <i class="fas fa-minus-circle"></i>
+          </span>
+          <span v-else>
+            Expand Table
+            <i class="fas fa-plus-circle"></i>
+          </span>
+        </button>
+        <button type="button" class="btn btn-success btn-sm ml-auto" @click="printDoc">
+          Print
+          <i class="fas fa-print"></i>
+        </button>
+      </div>
     </div>
 
     <span ref="resultTable">
       <h4 class="text-white text-center">{{examResult.exam}}</h4>
 
-      <table class="table table-bordered table-condensed table-hover table-responsive">
+      <table class="table table-bordered table-hover">
         <thead>
           <tr>
             <th>Application No.</th>
@@ -41,14 +53,20 @@
         <tbody>
           <tr v-for="student in examResult.students" :key="student.id">
             <td>{{student.app_number}}</td>
-            <td>{{student.fullname}}</td>
+            <td>{{student.fullname | upText}}</td>
             <td>{{student.phone}}</td>
             <td>{{student.state_of_origin}}</td>
             <td>{{student.lga_of_origin}}</td>
-            <td v-show="print">{{student.first_choice}}</td>
-            <td v-show="print">{{student.second_choice}}</td>
-            <td v-show="print">{{student.o_level_1}}</td>
-            <td v-show="print">{{student.o_level_2}}</td>
+            <td
+              v-show="print"
+              style="max-width: 300px; word-wrap:break-word;"
+            >{{student.first_choice}}</td>
+            <td
+              v-show="print"
+              style="max-width: 300px; word-wrap:break-word;"
+            >{{student.second_choice}}</td>
+            <td v-show="print" style="max-width: 300px; word-wrap:break-word;">{{student.o_level_1}}</td>
+            <td v-show="print" style="max-width: 300px; word-wrap:break-word;">{{student.o_level_2}}</td>
             <td>
               <div class="border-bottom-white" v-for="score in student.scores" :key="score.id">
                 <small>{{score.course.course}}: {{score.marks}}</small>
@@ -56,7 +74,9 @@
             </td>
             <td>{{student.total}}</td>
             <td v-show="print"></td>
-            <td v-show="print"></td>
+            <td v-show="print">
+              <span v-if="student.recommendation">{{student.recommendation.recommend}}</span>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -96,8 +116,10 @@ export default {
     examResult: Object
   },
   methods: {
-    printDoc() {
+    expandTable() {
       this.print = !this.print;
+    },
+    printDoc() {
       const cssText = `
         table {
                 color:black;

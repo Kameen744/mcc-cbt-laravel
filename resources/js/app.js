@@ -64,6 +64,7 @@ import ExamTimer from "./components/cbt/ExamTimer.vue";
 import QuestionOptions from "./components/cbt/exam-elem/QuestOptions.vue";
 import QuestionsNo from "./components/cbt/exam-elem/QuestionsNo.vue";
 import ExamResult from "./components/cbt/nav-pages/ExamResult.vue";
+import Recommendation from "./components/cbt/nav-pages/Recommendation.vue";
 import ResultTable from "./components/cbt/exam-elem/ResultTable.vue";
 
 // Library
@@ -107,59 +108,63 @@ window.Toast = Toast;
 window.DataButtonVue = DataButtonVue;
 
 const routes = [{
-        path: "/admin-settings",
-        component: AdminSettings
-    },
-    {
-        path: "/departments",
-        component: Department
-    },
-    {
-        path: "/courses",
-        component: Courses
-    },
-    {
-        path: "/section-questions",
-        component: SectionQuestions
-    },
-    {
-        path: "/exam-questions",
-        component: ExamQuestions
-    },
-    {
-        path: "/create-exam",
-        component: CreateExam
-    },
-    {
-        path: "/exam-result",
-        component: ExamResult
-    },
-    {
-        path: "/create-staff",
-        component: CreateStaff
-    },
-    {
-        path: "/staff-permission",
-        component: StaffPermission
-    },
-    {
-        path: "/upload-students",
-        component: UploadStudents
-    },
-    // library
-    // {path: '/libadmin-dashbaord', component: LibDashboard},
-    {
-        path: "/upload-newbook",
-        component: LibUploadNewbook
-    },
-    {
-        path: "/resources",
-        component: Resources
-    },
-    {
-        path: "/resource-type",
-        component: ResourceType
-    }
+    path: "/admin-settings",
+    component: AdminSettings
+},
+{
+    path: "/departments",
+    component: Department
+},
+{
+    path: "/courses",
+    component: Courses
+},
+{
+    path: "/section-questions",
+    component: SectionQuestions
+},
+{
+    path: "/exam-questions",
+    component: ExamQuestions
+},
+{
+    path: "/create-exam",
+    component: CreateExam
+},
+{
+    path: "/exam-result",
+    component: ExamResult
+},
+{
+    path: "/recommendation",
+    component: Recommendation
+},
+{
+    path: "/create-staff",
+    component: CreateStaff
+},
+{
+    path: "/staff-permission",
+    component: StaffPermission
+},
+{
+    path: "/upload-students",
+    component: UploadStudents
+},
+// library
+// {path: '/libadmin-dashbaord', component: LibDashboard},
+{
+    path: "/upload-newbook",
+    component: LibUploadNewbook
+},
+{
+    path: "/resources",
+    component: Resources
+},
+{
+    path: "/resource-type",
+    component: ResourceType
+}
 ];
 
 const router = new VueRouter({

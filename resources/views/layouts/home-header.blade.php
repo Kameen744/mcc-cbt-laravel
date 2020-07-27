@@ -39,7 +39,7 @@
             <li><a href="/">Home</a></li>
             <li><a href="/about">About</a></li>
             <li><a href="/library">Library</a></li>
-            <li><a href="http://192.168.1.31:8080">Bursary</a></li>
+            {{-- <li><a href="http://192.168.1.31:8080">Bursary</a></li> --}}
             <li><a href="/cbt">CBT</a></li>
             <li class="menu-has-children"><a href="#">More..</a>
               <ul>
@@ -61,6 +61,7 @@
               </ul>
             </li>					          					          		           --}}
             <li><a href="/contact">Contact</a></li>
+            <li>| <a href="/admin">Admin</a> |</li>
           </ul>
         </nav><!-- #nav-menu-container -->		    		
       </div>

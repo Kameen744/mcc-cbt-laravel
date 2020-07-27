@@ -253,7 +253,7 @@
       <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header py-1">
-            <h5 class="text-dark">Upload Students</h5>
+            <h5 class="text-dark">Upload Questions</h5>
           </div>
 
           <div class="modal-body overflow-auto px-3 h-auto" ref="uploadContainer">
@@ -423,7 +423,7 @@ export default {
     // },
     editQuestion() {
       this.$Progress.start();
-      this.form.put(`/question/${this.form.id}`).then(res => {
+      this.form.put(`question/${this.form.id}`).then(res => {
         this.questions = res.data;
         $("#questionModal").modal("hide");
         Toast.fire({
@@ -444,7 +444,7 @@ export default {
         confirmButtonText: "Yes, delete it!"
       }).then(result => {
         if (result.value) {
-          axios.delete(`/question/${id}`).then(res => {
+          axios.delete(`question/${id}`).then(res => {
             this.questions = res.data;
             Swal.fire("Deleted!", "Question has been deleted.", "success");
           });

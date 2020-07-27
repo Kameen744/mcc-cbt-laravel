@@ -9,6 +9,7 @@ use App\Cbt\ExamScore;
 use App\Cbt\Department;
 use App\Cbt\ExamAtempt;
 use App\Student\Student;
+use App\Student\StuExamTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -99,13 +100,38 @@ class CbtController extends Controller
     }
 
     public function get_exams(Department $department)
-    {
-        $exam = $department->exam()->with('course', 'section')->get();
-        
+    {   
+        $carbonDate = Carbon::now();
+        $date = $carbonDate->toDateString();
+        $time = $carbonDate->toTimeString();
+        $hour = substr($time, 0,2);
+       
+        $exam = $department->exam()
+        ->with('course', 'section')
+        ->where('exam_date', $date)
+        ->where('exam_time', 'like', $hour .'%')
+        ->get();
+        // $exam->push(now());
         return $exam;
         // return $exam->load('course');
     }
 
+    public function get_exam_start_time(Student $student) {
+        if($student->examTime) {
+            return $student->examTime;
+        }
+
+        StuExamTime::create([
+            'student_id' => $student->id,
+            'start_time' => now()
+        ]);
+    }
+
+    public function set_exam_finish_time(Student $student) 
+    {
+        $student->examTime->update(['finish_time' => now()]);
+    }
+    
     public function get_course_questions(Student $student, Exam $exam, Course $course)
     {
         // empty array to store random questions
@@ -175,13 +201,14 @@ class CbtController extends Controller
     public function get_attempted(Request $request)
     {
         // return $request->input('courses');
+       
         $attempted = [];
         foreach($request->courses as $course) {
             $attempts = ExamAtempt::where([
                 'student_id' => $request->student,
+                'exam_id' => $request->exam_id,
                 'course_id' => $course['id'],
             ])->get(['question_id', 'stu_attempt']);
-
             array_push($attempted, $attempts);
         }
 

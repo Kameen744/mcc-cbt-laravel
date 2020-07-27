@@ -111,7 +111,7 @@
       <footer class="sticky-footer bg-white">
         <div class="container my-auto">
           <div class="copyright text-center my-auto" style="padding: 0px;">
-            <span>Copyright &copy; MCCHST 2019 - Developed by Kamal 234 8034932065</span>
+            <i class="fas fa-copyright"></i> Developed by Kamal - kamalaminu94@gmail.com
           </div>
         </div>
       </footer>

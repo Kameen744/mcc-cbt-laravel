@@ -169,7 +169,7 @@
       </div>
       <hr class="m-0" />
       <h6 class="text-left mb-1">
-        <i class="fas fa-copyright"></i> MCCHST (Developed by KAMEEN IT Solution 2348034932065)
+        <i class="fas fa-copyright"></i> Developed by Kamal - kamalaminu94@gmail.com
       </h6>
     </div>
     <!-- ---------------calculator modal----------------------- -->
@@ -201,6 +201,7 @@ export default {
       currentExam: [],
       startTime: Date,
       endTime: Date,
+      currentTime: Date,
       examStart: false,
       currentCourse: null,
       curretnSection: 0,
@@ -210,27 +211,28 @@ export default {
       startExamButton: false,
       attempted: [],
       attemptForm: new Form({
-        attempts: []
+        attempts: [],
       }),
       checked: true,
-      timeHasFinish: false
+      timeHasFinish: false,
     };
   },
   props: {
     logout: "",
-    user: ""
+    user: "",
   },
   created() {
     this.currentUser = JSON.parse(this.user);
     Toast.fire({
       type: "success",
-      title: `${this.currentUser.fullname} Signed in successfully`
+      title: `${this.currentUser.fullname} Signed in successfully`,
     });
-    axios.get(`get_exams/${this.currentUser.department_id}`).then(res => {
+    axios.get(`get_exams/${this.currentUser.department_id}`).then((res) => {
       this.currentExam = res.data[0];
       this.getQuestions(0);
       this.getAttempted();
-      this.setExamTimer();
+      // this.currentTime = new Date(res.data[1]);
+      // this.setExamTimer();
     });
   },
   methods: {
@@ -240,10 +242,10 @@ export default {
       this.examStart = false;
     },
     setExamTimer() {
-      let startDate = new Date(
-        `${this.currentExam.exam_date} ${this.currentExam.exam_time}`
-      );
-
+      // let startDate = new Date(
+      //   `${this.currentExam.exam_date} ${this.currentExam.exam_time}`
+      // );
+      let startDate = this.currentTime;
       let finishDate = new Date(startDate);
 
       finishDate.setHours(startDate.getHours() + this.currentExam.exam_hours);
@@ -260,7 +262,11 @@ export default {
       }
     },
     startExam() {
-      this.examStart = true;
+      axios.get(`get_exam_start_time/${this.currentUser.id}`).then((res) => {
+        this.currentTime = new Date(res.data.start_time);
+        this.setExamTimer();
+        this.examStart = true;
+      });
     },
     getQuestions(courseKey) {
       this.currentQuestion = 0;
@@ -270,7 +276,7 @@ export default {
           .get(
             `get_course_questions/${this.currentUser.id}/${this.currentExam.id}/${crCourse.id}`
           )
-          .then(res => {
+          .then((res) => {
             this.questions[crCourse.id] = res.data;
             this.currentCourse = crCourse;
             this.setTotalNumberOfQuestions(crCourse);
@@ -285,10 +291,11 @@ export default {
     getAttempted() {
       let attemptsForm = new Form({
         student: this.currentUser.id,
-        courses: this.currentExam.course
+        exam_id: this.currentExam.id,
+        courses: this.currentExam.course,
       });
-      attemptsForm.post("get_attempted").then(res => {
-        res.data.forEach(attempt => {
+      attemptsForm.post("get_attempted").then((res) => {
+        res.data.forEach((attempt) => {
           this.attempted[attempt.question_id] = attempt.stu_attempt;
         });
       });
@@ -305,7 +312,7 @@ export default {
         course_id: question.course_id,
         section_id: question.section_id,
         question_id: question.id,
-        stu_attempt: answer
+        stu_attempt: answer,
       };
 
       this.attempted[question.id] = answer;
@@ -318,10 +325,10 @@ export default {
     submitAttempt() {
       this.attemptForm
         .post("attempt")
-        .then(res => {
+        .then((res) => {
           this.attemptForm.attempts.length = 0;
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
           this.attemptForm.attempts.length = 0;
         });
@@ -368,15 +375,15 @@ export default {
         showCancelButton: true,
         confirmButtonColor: "#0f442e",
         cancelButtonColor: "#810412",
-        confirmButtonText: "Yes, Submit and Logout!"
-      }).then(result => {
+        confirmButtonText: "Yes, Submit and Logout!",
+      }).then((result) => {
         if (result.value) {
           this.submitAttempt();
           this.timerEnds();
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -9,8 +9,10 @@ use App\Cbt\Department;
 use App\Cbt\ExamSection;
 use App\Student\Student;
 use App\Cbt\CourseSection;
+use App\Cbt\Recommendation;
 use Illuminate\Http\Request;
 use App\CustomClasses\Permited;
+use Illuminate\Support\Facades\DB;
 use App\CustomClasses\DataTableRes;
 use App\Http\Controllers\Controller;
 
@@ -174,7 +176,7 @@ class ExamController extends Controller
         abort_unless(Permited::check('Exam Result'), 403);
         $examScores = $exam->load('scores.course');
         // collect and map throught all department students
-        $students = collect($department->student)
+        $students = collect($department->student()->with('recommendation')->get())
         ->map(function($student) use($examScores) {
             // collect and map through students socres
             $student->scores = collect($examScores->scores)->where('student_id', $student->id);  
@@ -187,6 +189,16 @@ class ExamController extends Controller
             'exam_date' => $examScores->exam_date, 
             'students' => $students
         ];
+    }
+
+    public function add_recommendation($student_id, $recommend) 
+    {
+        
+        DB::table('recommendations')->updateOrInsert(
+            ['student_id' => $student_id],
+            ['recommend' => $recommend, 'student_id' => $student_id]
+        );
+
     }
         
         // $courses = [];

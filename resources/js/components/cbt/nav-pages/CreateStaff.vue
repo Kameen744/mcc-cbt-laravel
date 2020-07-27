@@ -304,7 +304,6 @@ export default {
 
     editAdmin() {
       this.updateDataTable();
-      console.log("pressed");
     },
     newUser() {
       this.$Progress.start();

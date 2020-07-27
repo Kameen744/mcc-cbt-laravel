@@ -29,14 +29,18 @@ class DefaultNavs extends Command
             'name' => $name,
             'navgroup_id' => $navGroupId
         ]);
+        
         $admin->navbar()->syncWithoutDetaching($navbar->id);
     }
     public function handle()
     {
         try {
+            $username = 'Kamal';
+            $password = 'kameen';
+
             $admin = Admin::create([
-                'username' => 'Kamal',
-                'password' => Hash::make('kameen'),
+                'username' => $username,
+                'password' => Hash::make($password),
                 'supervisor' => 1 
             ]);
             $groups = [
@@ -62,6 +66,7 @@ class DefaultNavs extends Command
                         $this::createNavbar('Exam Questions', $value->id, $admin);
                         $this::createNavbar('Create Exam', $value->id, $admin);
                         $this::createNavbar('Exam Result', $value->id, $admin);
+                        $this::createNavbar('Recommendation', $value->id, $admin);
                         break;
                     case 'Staff':
                         $this::createNavbar('Create Staff', $value->id, $admin);
@@ -77,7 +82,7 @@ class DefaultNavs extends Command
                         break;
                 }
             }
-            $this->info($admin->name .' Created successfully. Username: Kamal, Password: kameen.' );
+            $this->info($admin->name .' Created successfully. Username: ' .$username .', Password: ' .$password);
         } catch (\Throwable $th) {
             $this->error($th);
         }
