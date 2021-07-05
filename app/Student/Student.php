@@ -2,6 +2,7 @@
 
 namespace App\Student;
 
+use App\Cbt\Remark;
 use App\Cbt\ExamScore;
 use App\Cbt\ExamAtempt;
 use App\Cbt\Recommendation;
@@ -17,7 +18,7 @@ class Student extends Authenticatable
     use Notifiable;
     use LaravelVueDatatableTrait;
     use InsertOnDuplicateKey;
-    
+
     protected $dataTableColumns = [
         'id' => [
             'searchable' => true,
@@ -71,7 +72,7 @@ class Student extends Authenticatable
     // protected $casts = [
     //     'email_verified_at' => 'datetime',
     // ];
-    
+
     // Students Attempts
     public function attempts()
     {
@@ -93,5 +94,9 @@ class Student extends Authenticatable
 
     public function examTime() {
         return $this->hasOne(StuExamTime::class);
+    }
+
+    public function remark() {
+        return $this->hasOne(Remark::class);
     }
 }

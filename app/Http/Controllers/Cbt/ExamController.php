@@ -18,12 +18,12 @@ use App\Http\Controllers\Controller;
 
 class ExamController extends Controller
 {
-    public function __construct() 
+    public function __construct()
     {
         $this->middleware('authadm:admin');
     }
 
-    public function abort_if_not_permited() 
+    public function abort_if_not_permited()
     {
         abort_unless(Permited::check('Create Exam'), 403);
     }
@@ -108,7 +108,7 @@ class ExamController extends Controller
             foreach ($sections as $val) {
                 $crs = Course::findOrFail($val['course_id']);
                 $sec = CourseSection::findOrFail($val['section_id']);
-                
+
                 array_push($resArray, [
                     'id' => $val['id'],
                     'course' => $crs['course'],
@@ -158,7 +158,7 @@ class ExamController extends Controller
         return $this->sections($exam);
     }
 
-    public function del_exam_department(Exam $exam, Department $department) 
+    public function del_exam_department(Exam $exam, Department $department)
     {
         $this->abort_if_not_permited();
         $exam->department()->detach($department);
@@ -171,42 +171,97 @@ class ExamController extends Controller
         return $department->exam;
     }
 
+    public function start_exam(Exam $exam)
+    {
+        if($exam->started) {
+            $exam->update(['started' => 0]);
+        } else {
+            $exam->update(['started' => 1]);
+        }
+
+        return $exam->started;
+    }
+
     public function exam_scores(Department $department, Exam $exam)
     {
         abort_unless(Permited::check('Exam Result'), 403);
         $examScores = $exam->load('scores.course');
         // collect and map throught all department students
+
         $students = collect($department->student()->with('recommendation')->get())
         ->map(function($student) use($examScores) {
             // collect and map through students socres
-            $student->scores = collect($examScores->scores)->where('student_id', $student->id);  
-            $student->total = $student->scores->sum('marks');    
+            $student->scores = collect($examScores->scores)->where('student_id', $student->id);
+            $student->total = $student->scores->sum('marks');
             return $student;
         });
-       
+
+        $students_excel = collect($department->student()->with('recommendation')->get())
+        ->map(function($student) use($examScores) {
+            if(isset($student->recommendation->recommend)) {
+                $recommendation = $student->recommendation->recommend;
+            } else {
+                $recommendation = '';
+            }
+            if(isset($student->remark->remark)) {
+                $remark = $student->remark->remark;
+            } else {
+                $remark = '';
+            }
+
+            return [
+                'App Number' => $student->app_number,
+                'Full Name' => $student->fullname,
+                'Email' => $student->email,
+                'Phone' => $student->phone,
+                'Gender'    => $student->gender,
+                'State' => $student->state_of_origin,
+                'LGA'       => $student->lga_of_origin,
+                'Mode of Entry' => $student->mode_of_entry,
+                '1st Choice' => $student->first_choice,
+                '2nd Choice' => $student->second_choice,
+                'O Level 1' => $student->o_level_1,
+                'O Level 2' => $student->o_level_2,
+                'Total' => $student->scores->sum('marks'),
+                'Recommendation' => $recommendation,
+                'Remark' => $remark,
+            ];
+        });
+
         return [
-            'exam' => $examScores->exam, 
-            'exam_date' => $examScores->exam_date, 
-            'students' => $students
+            'exam' => $examScores->exam,
+            'exam_date' => $examScores->exam_date,
+            'students' => $students,
+            'studentsExcel' => $students_excel,
         ];
     }
 
-    public function add_recommendation($student_id, $recommend) 
+    public function add_recommendation($student_id, $recommend, $remark)
     {
-        
+        if(!empty($remark) & $remark != 'nill') {
+            $this::add_remark($student_id, $remark);
+        }
+
         DB::table('recommendations')->updateOrInsert(
             ['student_id' => $student_id],
             ['recommend' => $recommend, 'student_id' => $student_id]
         );
-
     }
-        
+
+    private static function add_remark($student_id, $remark)
+    {
+        DB::table('remarks')->updateOrInsert(
+            ['student_id' => $student_id],
+            ['student_id' => $student_id, 'remark' => $remark]
+        );
+    }
+
         // $courses = [];
 
         // for($i = 0; $i < count($students); ++$i) {
-            
+
         //     for($ii = 0; $ii < count($courses_and_scores->course); ++$ii) {
-                
+
         //         $mark = collect($courses_and_scores->scores)
         //         ->where('student_id', $students[$i]->id)
         //         ->where('course_id', $courses_and_scores->course[$ii]->id)
@@ -215,15 +270,15 @@ class ExamController extends Controller
         //         $mark ? $course_marks = $mark->marks : $course_marks = 0;
 
         //         $courses[$ii] = $courses_and_scores->course[$ii];
-        //         $courses[$ii]['marks'] = $course_marks; 
+        //         $courses[$ii]['marks'] = $course_marks;
         //         // $courses_and_scores->course[$ii]['marks'] = $course_marks;
-                
+
         //         // $courses[] =  $courses_and_scores->course[$ii];
         //     }
 
         //     $students[$i]['courses'] = $courses;
-            
-        
+
+
 
         // }
         // foreach($stu as $key => $student) {
@@ -234,8 +289,8 @@ class ExamController extends Controller
         //             'exam_id' => $exam->id,
         //             'course_id' => $course->id
         //         ])->first();
-                
-        //         $course['marks'] = $score; 
+
+        //         $course['marks'] = $score;
         //         array_push($courses, $course);
         //     }
         //     $student['courses'] = $courses;
@@ -244,25 +299,25 @@ class ExamController extends Controller
         //         return $students;
         //     }
         // }
-       
+
         // return $students;
 
     // }
 
     // public function exam_scores($department_id, Exam $exam)
     // {
-    //     // get all students of the department 
+    //     // get all students of the department
     //     $students = Student::where('department_id', $department_id)->get();
-       
+
     //     // get the courses and attepts of the exam
     //     $coursesAndAttempts = $exam->load('course', 'attempts');
     //      // marked students exam
     //      $markedExam = [
-    //         'exam' => $exam->exam, 
+    //         'exam' => $exam->exam,
     //         'exam_data' => $exam->exam_date,
     //         'students' => []
     //     ];
-    //     // loop throught the students 
+    //     // loop throught the students
     //     foreach($students as $key => $student) {
     //         // array to store student courses
     //         $studentCourses = [];
@@ -270,13 +325,13 @@ class ExamController extends Controller
     //         $studentTotal = 0;
     //         // loop throught exam courses
     //         foreach($coursesAndAttempts->course as $key => $course) {
-    //             // collect course scored attempts 
+    //             // collect course scored attempts
     //             $scored = collect($coursesAndAttempts->attempts)
     //             ->where('student_id', $student->id)
     //             ->where('course_id', $course->id)
     //             ->where('stu_mark', 1)
     //             ->count();
-               
+
     //             // add scored to the course array
     //             $course['scored'] = $scored;
     //             // push course to student courses
@@ -285,11 +340,11 @@ class ExamController extends Controller
     //             $studentTotal += $scored;
     //         }
 
-            
+
     //         $student['courses'] = $studentCourses;
     //         $student['total'] = $studentTotal;
     //         return $student;
-        
+
     //         // push to marked student exam
     //         array_push($markedExam['students'], $student);
     //     }

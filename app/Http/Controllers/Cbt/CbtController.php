@@ -18,7 +18,7 @@ use App\Http\Controllers\Controller;
 
 class CbtController extends Controller
 {
-    public function __construct() 
+    public function __construct()
     {
         $this->middleware('authcbt:cbt');
     }
@@ -100,42 +100,92 @@ class CbtController extends Controller
     }
 
     public function get_exams(Department $department)
-    {   
+    {
         $carbonDate = Carbon::now();
         $date = $carbonDate->toDateString();
         $time = $carbonDate->toTimeString();
         $hour = substr($time, 0,2);
-       
+
+        $hourOne = $hour -1 .'%';
+        $hourTwo = $hour -2 .'%';
+        $hourThree = $hour -3 .'%';
+
         $exam = $department->exam()
-        ->with('course', 'section')
         ->where('exam_date', $date)
-        ->where('exam_time', 'like', $hour .'%')
-        ->get();
+        ->where('started', 1)
+        // ->orWhere('exam_time', 'like', $hourOne)
+        // ->orWhere('exam_time', 'like', $hourTwo)
+        // ->orWhere('exam_time', 'like', $hourThree)
+        ->with('course', 'section')
+        ->first();
+
         // $exam->push(now());
         return $exam;
         // return $exam->load('course');
     }
 
-    public function get_exam_start_time(Student $student) {
-        if($student->examTime) {
-            return $student->examTime;
+    private static function cal_finish_time($time, $hours, $minutes) {
+        $finishTime = Carbon::parse($time);
+        $finishTime->addHours($hours);
+        $finishTime->addMinutes($minutes);
+        return $finishTime;
+    }
+
+    public function get_exam_start_time($student_id, Exam $exam, $status) {
+
+        $finishTime = $this::cal_finish_time(now(), $exam->exam_hours, $exam->exam_minutes);
+
+        if($status === 'start') {
+            $examStartTime = StuExamTime::where('student_id', $student_id)
+            ->where('exam_id', $exam->id)->first();
+            if($examStartTime) {
+                $finishTime = $this::cal_finish_time($examStartTime->start_time, $exam->exam_hours, $exam->exam_minutes);
+
+                if($examStartTime->elapse_time) {
+                    return [
+                        'startTime' => $examStartTime->elapse_time,
+                        'finishTime' => $finishTime
+                    ];
+                } else {
+                    return [
+                        'startTime' => $examStartTime->start_time,
+                        'finishTime' => $finishTime
+                    ];
+                }
+            } else {
+                $examTime = StuExamTime::create([
+                    'student_id'    =>  $student_id,
+                    'exam_id'       =>  $exam->id,
+                    'start_time'    =>  now(),
+                    'finish_time'   =>  $finishTime,
+                ]);
+                return [
+                    'startTime' => $examTime->start_time,
+                    'finishTime' => $examTime->finish_time,
+                ];
+            }
+        } else {
+            return [
+                'startTime' => now(),
+                'finishTime' => $finishTime,
+            ];
         }
-
-        $examTime = StuExamTime::create([
-            'student_id' => $student->id,
-            'start_time' => now()
-        ]);
-
-        return $examTime;
     }
 
-    public function set_exam_finish_time(Student $student) 
+    public function set_elapse_time($student_id, $exam_id, $time)
     {
-        // $student->examTime->update();
-        $exam = StuExamTime::where('student_id', $student->id)->first();
-        $exam->update(['finish_time' => now()]);
+        $examStartTime = StuExamTime::where('student_id', $student_id)
+        ->where('exam_id', $exam_id)->first();
+        $examStartTime->update(['elapse_time' => Carbon::createFromTimestampMs($time)]);
     }
-    
+
+    public function set_exam_finish_time($student_id, $exam_id)
+    {
+        $examFinishTime = StuExamTime::where('student_id', $student_id)
+        ->where('exam_id', $exam_id)->first();
+        $examFinishTime->update(['finish_time' => now()]);
+    }
+
     public function get_course_questions(Student $student, Exam $exam, Course $course)
     {
         // empty array to store random questions
@@ -146,13 +196,12 @@ class CbtController extends Controller
         $exam_sections = collect($exam->section)->where('course_id', $course->id);
         // check if student has attempted questions before on this exam
         $stu_attempt = $student->attempts()->where([
-            'exam_id' => $exam->id, 
+            'exam_id' => $exam->id,
             'course_id' => $course->id
         ])->get();
 
             // loop through current exam sections
             foreach($exam_sections as $exam_section) {
-                
                 // pick current exam section questions only
                 $section_questions = collect($data->questions)->where('section_id', $exam_section->section_id);
                 // get already attempted questions first
@@ -168,21 +217,21 @@ class CbtController extends Controller
                                     unset($section_questions[$key]);
                                 }
                             }
-                        //    
+                        //
                         }
                         // return $from_stu_attempted;
                         // $col_stu_att = collect($from_stu_attempted)->collapse();
-                        
+
                         $remain = $exam_section->no_questions - count($from_stu_attempted);
-                        
-                        // if attemped questios are less than number of required section questions 
+
+                        // if attemped questios are less than number of required section questions
                         if($remain > 0) {
-                           
+
                             $random = collect([
-                                $from_stu_attempted, 
+                                $from_stu_attempted,
                                 $section_questions->random($remain)
                             ])->collapse();
-                           
+
                         } else {
                             $random = $from_stu_attempted;
                         }
@@ -193,7 +242,7 @@ class CbtController extends Controller
                 // push it to the $randomise_questions variable
                 array_push($randomise_questions, $random);
             }
-            
+
         // return course sections and exam randomised questions
         return [
             'sections' => $data->sections,
@@ -205,7 +254,6 @@ class CbtController extends Controller
     public function get_attempted(Request $request)
     {
         // return $request->input('courses');
-       
         $attempted = [];
         foreach($request->courses as $course) {
             $attempts = ExamAtempt::where([
@@ -220,7 +268,7 @@ class CbtController extends Controller
     }
 
     public function attempt(Request $request)
-    {   
+    {
         event(new studentAttemptsEvent($request->input('attempts')));
     }
 }

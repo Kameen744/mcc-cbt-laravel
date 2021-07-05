@@ -2,16 +2,20 @@
 @section('content')
     @include('layouts.home-header')
     <!-- start banner Area -->
-			
-			<div id="homeMainCarousel" class="carousel slide" data-ride="carousel">
+			<style>
+				.mxh800 {
+					max-height: 800px;
+				}
+			</style>
+			<div id="homeMainCarousel" class="mxh800" data-ride="carousel">
 				{{-- <ol class="carousel-indicators">
 					<li data-target="#homeMainCarousel" data-slide-to="0" class="active"></li>
 					<li data-target="#homeMainCarousel" data-slide-to="1"></li>
 					<li data-target="#homeMainCarousel" data-slide-to="2"></li>
 				</ol> --}}
-				<div class="carousel-inner" role="listbox">
-					<div class="carousel-item active">
-						<section class="banner-bg1 banner-area relative" id="home">
+				<div class="carousel-inner mxh800" role="listbox">
+					<div class="carousel-item active fadeInUpBig">
+						<section class="banner-area relative mxh800" id="home" style="background: url({{asset('img/banner-bg.jpg')}}) right; background-size:cover;">
 							<div class="overlay overlay-bg"></div>	
 							<div class="container">
 								<div class="row fullscreen d-flex align-items-center justify-content-between">
@@ -28,8 +32,8 @@
 							</div>					
 						</section>
 					</div>
-					<div class="carousel-item">
-						<section class="banner-bg2 banner-area relative" id="home">
+					<div class="carousel-item fadeIn">
+						<section class="banner-bg2 banner-area relative mxh800" id="home">
 							<div class="overlay overlay-bg"></div>	
 							<div class="container">
 								<div class="row fullscreen d-flex align-items-center justify-content-between">
@@ -45,8 +49,8 @@
 							</div>					
 						</section>
 					</div>
-					<div class="carousel-item">
-						<section class="banner-bg3 banner-area relative" id="home">
+					<div class="carousel-item fadeInUpBig">
+						<section class="banner-bg3 banner-area relative mxh800" id="home">
 							<div class="overlay overlay-bg"></div>	
 							<div class="container">
 								<div class="row fullscreen d-flex align-items-center justify-content-between">
@@ -75,7 +79,7 @@
 			<!-- End banner Area -->
 
 			<!-- Start feature Area -->
-			<section class="feature-area">
+			{{-- <section class="feature-area">
 				<div class="container">
 					<div class="row">
 						<div class="col-lg-4">
@@ -105,7 +109,7 @@
 										To create a center per excellence that contributes to national 
 										development through training, research and manpower development.
 									</p>
-									<a href="#">Join Now</a>									
+									<a href="#">More..</a>									
 								</div>
 							</div>
 						</div>
@@ -119,26 +123,19 @@
 										Contribute to the Primary and Secondary Health System Manpower that are qualitative, 
 										God Conscious and which can positively responds to the community health needs.
 									</p>
-									<a href="#">Join Now</a>									
+									<a href="#">More..</a>									
 								</div>
 							</div>
 						</div>												
 					</div>
 				</div>	
-			</section>
+			</section> --}}
 			<!-- End feature Area -->
 					
 			<!-- Start popular-course Area -->
-			<section class="popular-course-area section-gap">
+			<section class="popular-course-area feature-area">
 				<div class="container">
-					<div class="row d-flex justify-content-center">
-						<div class="menu-content pb-70 col-lg-8">
-							<div class="title text-center">
-								<h1 class="mb-10">Popular Courses we offer</h1>
-								{{-- <p>There is a moment in the life of any aspiring.</p> --}}
-							</div>
-						</div>
-					</div>						
+											
 					<div class="row">
 						<div class="active-popular-carusel">
 							<div class="single-popular-carusel">

@@ -1,17 +1,28 @@
 <template>
   <span>
     <div class="container-fluid" v-if="!examStart">
-      <nav class="navbar navbar-expand-sm navbar-light bg-light navbar-fixed-top shadow-sm m-0 p-1">
+      <nav
+        class="
+          navbar navbar-expand-sm navbar-light
+          bg-light
+          navbar-fixed-top
+          shadow-sm
+          m-0
+          p-1
+        "
+      >
         <a class="navbar-brand" href="#">MCCHST CBT</a>
-        <a class="navbar-brand ml-auto border-primary">Name: {{currentUser.fullname}}</a>
+        <a class="navbar-brand ml-auto border-primary"
+          >Name: {{ currentUser.fullname }}</a
+        >
       </nav>
       <div class="jumbotron jumbotron-fluid">
         <div class="container">
-          <h1 class="display-3">{{currentExam.exam}}</h1>
+          <h1 class="display-3">{{ currentExam.exam }}</h1>
           <h4 class="lead">Exam Instructions</h4>
           <hr class="my-2" />
-          <h5>Your Name: {{currentUser.fullname}}</h5>
-          <h5>Application Number: {{currentUser.app_number}}</h5>
+          <h5>Your Name: {{ currentUser.fullname }}</h5>
+          <h5>Application Number: {{ currentUser.app_number }}</h5>
           <span v-if="timeHasFinish">
             <h3>Your time on this exam has finished.</h3>
             <p class="lead">
@@ -23,19 +34,34 @@
             <a
               class="btn btn-primary btn-lg"
               href
-              :class="{'disabled' : !startExamButton}"
+              :class="{ disabled: !startExamButton }"
               @click.prevent="startExam"
-            >Start Exam</a>
+              >Start Exam</a
+            >
           </p>
         </div>
       </div>
     </div>
 
     <div class="container-fluid bg-gray-400" v-if="examStart">
-      <nav class="navbar navbar-expand-sm navbar-light bg-gray-200 navbar-fixed-top shadow-sm py-0">
+      <nav
+        class="
+          navbar navbar-expand-sm navbar-light
+          bg-gray-200
+          navbar-fixed-top
+          shadow-sm
+          py-0
+        "
+      >
         <a class="navbar-brand" href="#">MCCHST CBT</a>
-
-        <exam-timer class="ml-auto" :startTime="startTime" :endTime="endTime" @timeEnd="timerEnds"></exam-timer>
+        <exam-timer
+          v-if="startTime"
+          class="ml-auto"
+          :startTime="startTime"
+          :endTime="endTime"
+          @timeElapse="updateTimeElapse"
+          @timeEnd="timerEnds"
+        ></exam-timer>
       </nav>
       <div class="row mb-0" v-if="currentCourse">
         <div class="col-md-9">
@@ -45,25 +71,54 @@
               v-for="(course, key) in currentExam.course"
               :key="key"
               @click="getQuestions(key)"
-              :class="course.id === currentCourse.id ? 'btn-primary' : 'btn-secondary' "
-            >{{course.course}}</button>
+              :class="
+                course.id === currentCourse.id ? 'btn-primary' : 'btn-secondary'
+              "
+            >
+              {{ course.course }}
+            </button>
           </div>
 
           <div class="row">
             <div class="col-md-12">
-              <span v-for="(section, key) in questions[currentCourse.id].sections" :key="key">
+              <span
+                v-for="(section, key) in questions[currentCourse.id].sections"
+                :key="key"
+              >
                 <div
-                  class="row border-bottom-primary d-flex justify-content-between mb-1 mx-1"
-                  v-if="section.id === questions[currentCourse.id].questions[currentQuestion].section_id"
+                  class="
+                    row
+                    border-bottom-primary
+                    d-flex
+                    justify-content-between
+                    mb-1
+                    mx-1
+                  "
+                  v-if="
+                    section.id ===
+                    questions[currentCourse.id].questions[currentQuestion]
+                      .section_id
+                  "
                 >
-                  <b
-                    class
-                  >Question No: {{currentQuestion +1}} / {{questions[currentCourse.id].questions.length}}</b>
-                  <b class="text-right">{{section.section}}</b>
+                  <b class
+                    >Question No: {{ currentQuestion + 1 }} /
+                    {{ questions[currentCourse.id].questions.length }}</b
+                  >
+                  <b class="text-right">{{ section.section }}</b>
                 </div>
                 <p
-                  class="text-center text-dark sectionQuestion p-2 bg-gray-300 shadow-sm"
-                  v-if="section.id === questions[currentCourse.id].questions[currentQuestion].section_id"
+                  class="
+                    text-center text-dark
+                    sectionQuestion
+                    p-2
+                    bg-gray-300
+                    shadow-sm
+                  "
+                  v-if="
+                    section.id ===
+                    questions[currentCourse.id].questions[currentQuestion]
+                      .section_id
+                  "
                   v-html="section.question"
                 ></p>
               </span>
@@ -78,7 +133,10 @@
           >
             <div class="col-md-12" v-if="key === currentQuestion">
               <hr />
-              <h5 class="d-block pl-3 shadow-sm pb-2 mb-0 text-dark" v-html="question.question"></h5>
+              <h5
+                class="d-block pl-3 shadow-sm pb-2 mb-0 text-dark"
+                v-html="question.question"
+              ></h5>
               <div class="list-group shadow-sm mt-0" :key="checked">
                 <question-option
                   :question="question"
@@ -115,8 +173,11 @@
             </div>
           </div>
 
-          <div class="row d-flex justify-content-center mt-1">
-            <button class="btn btn-primary btn-flat mr-2" @click="previousQuestion">
+          <div class="row d-flex justify-content-center mt-2 mb-2">
+            <button
+              class="btn btn-primary btn-flat mr-2"
+              @click="previousQuestion"
+            >
               <i class="fas fa-arrow-circle-left"></i> Prev
             </button>
             <button class="btn btn-success btn-flat mr-2" @click="nextQuestion">
@@ -143,7 +204,8 @@
                   <i class="fas fa-circle fa-1x text-primary"></i> Attempted
                 </b>
                 <b>
-                  <i class="fas fa-circle fa-1x text-secondary"></i> Not Attempted
+                  <i class="fas fa-circle fa-1x text-secondary"></i> Not
+                  Attempted
                 </b>
               </div>
             </div>
@@ -155,13 +217,17 @@
                 >
                   <i class="fas fa-calculator"></i> Calculator
                 </button>
-                <button class="btn btn-secondary btn-sm btn-block mb-1 shadow-sm">
+                <button
+                  class="btn btn-secondary btn-sm btn-block mb-1 shadow-sm"
+                >
                   <i class="fas fa-sticky-note"></i> Instructions
                 </button>
                 <button
                   class="btn btn-danger btn-sm btn-block mt-2 shadow-sm"
                   @click="finishedExam"
-                >Finish</button>
+                >
+                  Finish
+                </button>
               </div>
             </div>
           </div>
@@ -169,7 +235,8 @@
       </div>
       <hr class="m-0" />
       <h6 class="text-left mb-1">
-        <i class="fas fa-copyright"></i> Developed by Kamal - kamalaminu94@gmail.com
+        <i class="fas fa-copyright"></i> Developed by Kamal -
+        kamalaminu94@gmail.com
       </h6>
     </div>
     <!-- ---------------calculator modal----------------------- -->
@@ -193,15 +260,14 @@
 </template>
 
 <script>
-import moment from "moment";
 export default {
   data() {
     return {
       currentUser: "",
       currentExam: [],
-      startTime: Date,
-      endTime: Date,
-      currentTime: Date,
+      startTime: null,
+      endTime: null,
+      elapse_count: 0,
       examStart: false,
       currentCourse: null,
       curretnSection: 0,
@@ -228,48 +294,68 @@ export default {
       title: `${this.currentUser.fullname} Signed in successfully`,
     });
     axios.get(`get_exams/${this.currentUser.department_id}`).then((res) => {
-      this.currentExam = res.data[0];
-      this.getQuestions(0);
-      this.getAttempted();
-      // this.currentTime = new Date(res.data[1]);
-      // this.setExamTimer();
+      if (res.data.exam != null) {
+        this.currentExam = res.data;
+        this.setExamTimer(this.currentExam.id, "no");
+      } else {
+        console.log("no exam record found");
+      }
     });
   },
   methods: {
-    timerEnds() {
-      axios.get(`set_exam_finish_time/${this.currentUser.id}`).then((res) => {
-        this.submitAttempt();
-        this.timeHasFinish = true;
-        this.examStart = false;
-      });
-    },
-    setExamTimer() {
-      // let startDate = new Date(
-      //   `${this.currentExam.exam_date} ${this.currentExam.exam_time}`
-      // );
-      let startDate = this.currentTime;
-      let finishDate = new Date(startDate);
-
-      finishDate.setHours(startDate.getHours() + this.currentExam.exam_hours);
-      finishDate.setMinutes(
-        startDate.getMinutes() + this.currentExam.exam_minutes
-      );
-
-      let time = Date.parse(new Date(finishDate)) - Date.parse(startDate);
-      if (time > 0) {
-        this.startTime = startDate;
-        this.endTime = finishDate;
-      } else {
-        this.timeHasFinish = true;
+    updateTimeElapse(time) {
+      this.elapse_count++;
+      if (this.elapse_count === 60) {
+        axios.get(
+          `set_elapse_time/${this.currentUser.id}/${
+            this.currentExam.id
+          }/${Date.parse(time)}`
+        );
+        this.elapse_count = 0;
       }
     },
-    startExam() {
-      axios.get(`get_exam_start_time/${this.currentUser.id}`).then((res) => {
-        this.currentTime = new Date(res.data.start_time);
-        this.setExamTimer();
-        this.examStart = true;
-      });
+    timerEnds() {
+      this.submitAttempt();
+      axios
+        .get(
+          `set_exam_finish_time/${this.currentUser.id}/${this.currentExam.id}`
+        )
+        .then((res) => {
+          this.timeHasFinish = true;
+          this.examStart = false;
+          window.location.href = this.logout;
+        });
     },
+    setExamTimer(examId, startExam) {
+      axios
+        .get(
+          `get_exam_start_time/${this.currentUser.id}/${examId}/${startExam}`
+        )
+        .then((res) => {
+          let startDate = new Date(res.data.startTime);
+          let finishDate = new Date(res.data.finishTime);
+
+          let time = Date.parse(finishDate) - Date.parse(startDate);
+
+          if (time > 0) {
+            if (startExam === "start") {
+              this.startTime = startDate;
+              this.endTime = finishDate;
+              this.examStart = true;
+            } else {
+              this.getQuestions(0);
+              this.getAttempted();
+            }
+          } else {
+            this.timeHasFinish = true;
+          }
+        });
+    },
+
+    startExam() {
+      this.setExamTimer(this.currentExam.id, "start");
+    },
+
     getQuestions(courseKey) {
       this.currentQuestion = 0;
       let crCourse = this.currentExam.course[courseKey];
@@ -303,9 +389,8 @@ export default {
       });
     },
     setTotalNumberOfQuestions(crCourse) {
-      this.currentQuestionsNumber = this.questions[
-        crCourse.id
-      ].questions.length;
+      this.currentQuestionsNumber =
+        this.questions[crCourse.id].questions.length;
     },
     attemptQuestion(question, answer) {
       let guess = {
@@ -320,7 +405,8 @@ export default {
       this.attempted[question.id] = answer;
       this.checked = !this.checked;
       this.attemptForm.attempts.push(guess);
-      if (this.attemptForm.attempts.length === 1) {
+
+      if (this.attemptForm.attempts.length === 4) {
         this.submitAttempt();
       }
     },
@@ -331,7 +417,7 @@ export default {
           this.attemptForm.attempts.length = 0;
         })
         .catch((error) => {
-          console.log(error);
+          //   console.log(error);
           this.attemptForm.attempts.length = 0;
         });
     },
@@ -380,7 +466,7 @@ export default {
         confirmButtonText: "Yes, Submit and Logout!",
       }).then((result) => {
         if (result.value) {
-          this.submitAttempt();
+          //   this.submitAttempt();
           this.timerEnds();
         }
       });

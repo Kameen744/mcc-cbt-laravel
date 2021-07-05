@@ -7,20 +7,34 @@
             <div class="col-md-12">
               <div class="row d-flex justify-content-center">
                 <div class="form-group col-3">
-                  <select class="form-control form-control-sm" @change="getDeptExams">
+                  <select
+                    class="form-control form-control-sm"
+                    @change="getDeptExams"
+                  >
                     <option value selected>Departments</option>
                     <option
                       v-for="department in departments"
                       :key="department.id"
                       :value="department.id"
-                    >{{ department.department }}</option>
+                    >
+                      {{ department.department }}
+                    </option>
                   </select>
                 </div>
 
                 <div class="form-group col-3">
-                  <select class="form-control form-control-sm" @change="getExamScores">
+                  <select
+                    class="form-control form-control-sm"
+                    @change="getExamScores"
+                  >
                     <option value selected>Exams</option>
-                    <option v-for="exam in exams" :key="exam.id" :value="exam.id">{{ exam.exam }}</option>
+                    <option
+                      v-for="exam in exams"
+                      :key="exam.id"
+                      :value="exam.id"
+                    >
+                      {{ exam.exam }}
+                    </option>
                   </select>
                 </div>
               </div>
@@ -56,54 +70,66 @@
           <div class="modal-body">
             <div class="container-fluid">
               <div class="row shadow-sm justify-content-center">
+                <div class="col-md-auto form-group">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Remark"
+                    v-model="remark"
+                  />
+                </div>
                 <div class="col-md-auto">
-                  <select
-                    class="form-control form-control-lg bg-primary text-white"
-                    @change="recommend"
-                  >
+                  <select class="form-control" @change="recommend">
                     <option disabled selected>Recommendation</option>
                     <option
                       v-for="(recommend, key) in recommendations"
                       :key="key"
                       :value="recommend"
-                    >{{recommend}}</option>
+                    >
+                      {{ recommend }}
+                    </option>
                   </select>
                 </div>
               </div>
               <div class="card-body shadow-sm text-dark">
                 <h5 class="card-title text-center text-dark">
-                  <b class="px-2 btn-primary">{{Student.fullname}}</b>
+                  <b class="px-2 btn-primary">{{ Student.fullname }}</b>
                 </h5>
                 <h5 class="card-title">
                   <h5 class="px-2 btn-primary">App No:</h5>
-                  {{Student.app_number}}
+                  {{ Student.app_number }}
                 </h5>
                 <h5 class="card-title">
                   <h5 class="px-2 btn-primary">Registered:</h5>
-                  {{Student.created_at | myDate}}
+                  {{ Student.created_at | myDate }}
                 </h5>
                 <hr />
                 <div class="row">
                   <div class="col-6 border-left-danger shadow-sm">
                     <h5 class="px-2 btn-primary">First Choice:</h5>
-                    {{Student.first_choice}}
+                    {{ Student.first_choice }}
                   </div>
                   <div class="col-6 border-left-danger shadow-sm">
                     <h5 class="px-2 btn-primary">Second Choice:</h5>
-                    {{Student.second_choice}}
+                    {{ Student.second_choice }}
                   </div>
 
                   <div class="col-12 border-left-danger shadow-sm">
                     <h5 class="px-2 btn-primary">O level 1:</h5>
-                    {{Student.o_level_1}}
+                    {{ Student.o_level_1 }}
                   </div>
-                  <div class="col-12 border-left-danger shadow-sm" v-if="Student.o_level_2">
+                  <div
+                    class="col-12 border-left-danger shadow-sm"
+                    v-if="Student.o_level_2"
+                  >
                     <h5 class="px-2 btn-primary">O level 2:</h5>
-                    {{Student.o_level_2}}
+                    {{ Student.o_level_2 }}
                   </div>
 
                   <div class="col-12 border-left-danger shadow-sm">
-                    <h5 class="text-center btn-primary">{{current_exam.exam}} Scores</h5>
+                    <h5 class="text-center btn-primary">
+                      {{ current_exam.exam }} Scores
+                    </h5>
                   </div>
 
                   <div
@@ -112,9 +138,9 @@
                     :key="score.id"
                   >
                     <h5 class="btn-primary text-center">
-                      {{score.course.course}}
+                      {{ score.course.course }}
                       <p>
-                        <b>{{score.marks}}</b>
+                        <b>{{ score.marks }}</b>
                       </p>
                     </h5>
                   </div>
@@ -122,7 +148,7 @@
                     <h5 class="text-center btn-primary">
                       Total Marks:
                       <p>
-                        <b>{{Student.total}}</b>
+                        <b>{{ Student.total }}</b>
                       </p>
                     </h5>
                   </div>
@@ -146,37 +172,37 @@ export default {
         {
           label: "Application No.",
           name: "app_number",
-          filterable: true
+          filterable: true,
         },
         {
           label: "Full Name",
           name: "fullname",
-          filterable: true
+          filterable: true,
         },
         {
           label: "Gender",
           name: "gender",
-          filterable: true
+          filterable: true,
         },
         {
           label: "State",
           name: "state_of_origin",
-          filterable: true
+          filterable: true,
         },
         {
           label: "LGA",
           name: "lga_of_origin",
-          filterable: true
+          filterable: true,
         },
         {
           label: "Phone",
           name: "phone",
-          filterable: true
+          filterable: true,
         },
         {
           label: "Entry",
           name: "mode_of_entry",
-          filterable: true
+          filterable: true,
         },
         {
           label: "",
@@ -186,20 +212,20 @@ export default {
             btn: true,
             "btn-danger": true,
             "btn-sm": true,
-            font: "fas fa-eye"
+            font: "fas fa-eye",
           },
           event: "click",
           handler: this.viewStudent,
-          component: DataButtonVue
-        }
+          component: DataButtonVue,
+        },
       ],
       classes: {
         table: {
           table: true,
           "table-striped": true,
           "table-bordered": true,
-          "text-white": true
-        }
+          "text-white": true,
+        },
       },
       editMode: true,
       data_table_key: 1,
@@ -217,11 +243,11 @@ export default {
         second_choice: "",
         o_level_1: "",
         o_level_2: "",
-        department_id: ""
+        department_id: "",
       }),
       uploadForm: new Form({
         department_id: null,
-        students: []
+        students: [],
       }),
       departments: [],
       current_exam: [],
@@ -232,24 +258,30 @@ export default {
         "BMA",
         "BMT",
         "CHEW",
-        "JCHW",
-        "ND-DT",
         "DST",
-        "EVT",
+        "JCHW",
+        "MLT",
+        "ND-DT",
+        "NDHIM",
         "ND-EH",
         "PDHIM",
-        "NDHIM",
-        "MLT",
-        "PTP"
+        "PTP",
+        "DPH",
+        "HND EH",
+        "HND DH",
+        "PRE-HND DH",
+        "HND-HIM",
       ],
       departments: [],
       department: null,
       exams: [],
-      examResult: null
+      examResult: null,
+      remark: "",
     };
   },
   created() {
     this.getDeprtments();
+    this.getRecommendations();
   },
   methods: {
     updateDataTable() {
@@ -258,8 +290,13 @@ export default {
         : (this.data_table_key = 1);
     },
     getDeprtments() {
-      axios.get("department").then(res => {
+      axios.get("department").then((res) => {
         this.departments = res.data.data;
+      });
+    },
+    getRecommendations() {
+      axios.get("recommendation_options").then((res) => {
+        this.recommendations = res.data;
       });
     },
     viewStudent(student) {
@@ -269,7 +306,9 @@ export default {
       //   .then(res => {
       //     this.departmentStudents = res.data;
       //   });
-      let result = this.examResult.students.find(stu => stu.id === student.id);
+      let result = this.examResult.students.find(
+        (stu) => stu.id === student.id
+      );
       if (result) {
         this.Student = result;
       }
@@ -277,44 +316,50 @@ export default {
       $("#viewStudent").modal("show");
     },
     getDepartmentStudents(e) {
-      axios.get(`get_department_students/${e.target.value}`).then(res => {
+      axios.get(`get_department_students/${e.target.value}`).then((res) => {
         this.departmentStudents = res.data;
       });
     },
     recommend(e) {
+      if (this.remark == "") {
+        this.remark = "nill";
+      }
       axios
-        .post(`recommendation/${this.Student.id}/${e.target.value}`)
-        .then(res => {
-          e.target.value = "";
+        .post(
+          `recommendation/${this.Student.id}/${e.target.value}/${this.remark}`
+        )
+        .then((res) => {
+          e.target.value = "Recommendation";
+          this.remark = "";
         });
     },
 
     getFilterOptions() {
-      axios.get("department").then(res => {
+      axios.get("department").then((res) => {
         this.departments = res.data.data;
       });
     },
     getDeptExams(e) {
       this.department = e.target.value;
-      axios.get(`department_exams/${this.department}`).then(res => {
+      axios.get(`department_exams/${this.department}`).then((res) => {
         this.exams = res.data;
       });
     },
     getExamScores(e) {
-      this.current_exam = this.exams.find(exm => exm.id == e.target.value);
+      this.current_exam = this.exams.find((exm) => exm.id == e.target.value);
       if (this.current_exam.id) {
         axios
           .get(`exam_scores/${this.department}/${this.current_exam.id}`)
-          .then(res => {
+          .then((res) => {
             this.examResult = res.data;
           });
         this.data_table_url = "get_students";
       }
-    }
+    },
   },
   created() {
     this.getFilterOptions();
-  }
+  },
 };
 </script>
 <style scoped>

@@ -3,7 +3,7 @@
     <div class="row d-flex justify-content-between px-3">
       <export-excel
         class="btn btn-secondary btn-sm mb-1"
-        :data="examResult.students"
+        :data="examResult.studentsExcel"
         :meta="result_meta"
         worksheet="Result"
         :name="`${examResult.exam}.xls`"
@@ -12,7 +12,11 @@
         <i class="fas fa-file-excel"></i>
       </export-excel>
       <div>
-        <button type="button" class="btn btn-primary btn-sm ml-auto" @click="expandTable">
+        <button
+          type="button"
+          class="btn btn-primary btn-sm ml-auto"
+          @click="expandTable"
+        >
           <span v-if="print">
             Collapse Table
             <i class="fas fa-minus-circle"></i>
@@ -22,7 +26,11 @@
             <i class="fas fa-plus-circle"></i>
           </span>
         </button>
-        <button type="button" class="btn btn-success btn-sm ml-auto" @click="printDoc">
+        <button
+          type="button"
+          class="btn btn-success btn-sm ml-auto"
+          @click="printDoc"
+        >
           Print
           <i class="fas fa-print"></i>
         </button>
@@ -30,7 +38,7 @@
     </div>
 
     <span ref="resultTable">
-      <h4 class="text-white text-center">{{examResult.exam}}</h4>
+      <h4 class="text-white text-center">{{ examResult.exam }}</h4>
 
       <table class="table table-bordered table-hover">
         <thead>
@@ -52,30 +60,38 @@
         </thead>
         <tbody>
           <tr v-for="student in examResult.students" :key="student.id">
-            <td>{{student.app_number}}</td>
-            <td>{{student.fullname | upText}}</td>
-            <td>{{student.phone}}</td>
-            <td>{{student.state_of_origin}}</td>
-            <td>{{student.lga_of_origin}}</td>
-            <td
-              v-show="print"
-              style="max-width: 300px; word-wrap:break-word;"
-            >{{student.first_choice}}</td>
-            <td
-              v-show="print"
-              style="max-width: 300px; word-wrap:break-word;"
-            >{{student.second_choice}}</td>
-            <td v-show="print" style="max-width: 300px; word-wrap:break-word;">{{student.o_level_1}}</td>
-            <td v-show="print" style="max-width: 300px; word-wrap:break-word;">{{student.o_level_2}}</td>
+            <td>{{ student.app_number }}</td>
+            <td>{{ student.fullname | upText }}</td>
+            <td>{{ student.phone }}</td>
+            <td>{{ student.state_of_origin }}</td>
+            <td>{{ student.lga_of_origin }}</td>
+            <td v-show="print" style="max-width: 300px; word-wrap: break-word">
+              {{ student.first_choice }}
+            </td>
+            <td v-show="print" style="max-width: 300px; word-wrap: break-word">
+              {{ student.second_choice }}
+            </td>
+            <td v-show="print" style="max-width: 300px; word-wrap: break-word">
+              {{ student.o_level_1 }}
+            </td>
+            <td v-show="print" style="max-width: 300px; word-wrap: break-word">
+              {{ student.o_level_2 }}
+            </td>
             <td>
-              <div class="border-bottom-white" v-for="score in student.scores" :key="score.id">
-                <small>{{score.course.course}}: {{score.marks}}</small>
+              <div
+                class="border-bottom-white"
+                v-for="score in student.scores"
+                :key="score.id"
+              >
+                <small>{{ score.course.course }}: {{ score.marks }}</small>
               </div>
             </td>
-            <td>{{student.total}}</td>
+            <td>{{ student.total }}</td>
             <td v-show="print"></td>
             <td v-show="print">
-              <span v-if="student.recommendation">{{student.recommendation.recommend}}</span>
+              <span v-if="student.recommendation">{{
+                student.recommendation.recommend
+              }}</span>
             </td>
           </tr>
         </tbody>
@@ -96,24 +112,24 @@ export default {
         Gender: "gender",
         Courses: {
           field: "courses",
-          callback: value => {
+          callback: (value) => {
             return `${value.course} : ${value}`;
-          }
+          },
         },
-        Total: "total"
+        Total: "total",
       },
       result_meta: [
         [
           {
             key: "charset",
-            value: "utf-8"
-          }
-        ]
-      ]
+            value: "utf-8",
+          },
+        ],
+      ],
     };
   },
   props: {
-    examResult: Object
+    examResult: Object,
   },
   methods: {
     expandTable() {
@@ -146,8 +162,8 @@ export default {
        `;
       const d = new Printd();
       d.print(this.$refs.resultTable, [cssText]);
-    }
-  }
+    },
+  },
 };
 </script>
 

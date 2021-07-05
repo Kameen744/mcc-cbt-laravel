@@ -13,12 +13,12 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class QuestionController extends Controller
 {
-    public function __construct() 
+    public function __construct()
     {
         $this->middleware('authadm:admin');
     }
 
-    public function abort_if_not_permited() 
+    public function abort_if_not_permited()
     {
         abort_unless(Permited::check('Exam Questions'), 403);
     }
@@ -52,14 +52,14 @@ class QuestionController extends Controller
             $data = Excel::toArray(new QuestionImport, $request->file('file'));
             return $data;
         } else {
-            
+
             $data = $this::validateData($request);
 
             Question::create($data);
 
             return Course::find($request->course_id)->questions;
         }
-        
+
     }
 
     /**
@@ -100,29 +100,29 @@ class QuestionController extends Controller
             'course_id' => 'required',
             'section_id' => 'required'
         ]);
-        
+
         $insertData = [];
-    
+
         $now = Carbon::now();
-        
+
         if($request->questions) {
             $questions = $request->questions;
-            foreach ($questions as $i => $question) { 
+            foreach ($questions as $i => $question) {
                 if($i > 0) {
                     $row = [
                         'course_id'     => $request->course_id,
                         'section_id'    => $request->section_id,
-                        'question'      => $question[1],
-                        'option_a'      => $question[2],
-                        'option_b'      => $question[3],
-                        'option_c'      => $question[4],
-                        'option_d'      => $question[5],
-                        'answer'        => $question[6],
+                        'question'      => $question[0],
+                        'option_a'      => $question[1],
+                        'option_b'      => $question[2],
+                        'option_c'      => $question[3],
+                        'option_d'      => $question[4],
+                        'answer'        => $question[5],
                         'created_at'    => $now,
                         'updated_at'    => $now
                     ];
                     array_push($insertData, $row);
-                } 
+                }
             }
 
             try {

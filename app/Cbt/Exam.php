@@ -14,7 +14,7 @@ class Exam extends Model
     use LaravelVueDatatableTrait;
 
     protected $guarded = [];
-    
+
     protected $dataTableColumns = [
         'id' => [
             'searchable' => true,

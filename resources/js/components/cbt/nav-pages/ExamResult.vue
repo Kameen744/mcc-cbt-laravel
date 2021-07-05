@@ -5,20 +5,30 @@
         <div class="col-md-12">
           <div class="row d-flex justify-content-center">
             <div class="form-group col-3">
-              <select class="form-control form-control-sm" @change="getDeptExams">
+              <select
+                class="form-control form-control-sm"
+                @change="getDeptExams"
+              >
                 <option value selected>Departments</option>
                 <option
                   v-for="department in departments"
                   :key="department.id"
                   :value="department.id"
-                >{{ department.department }}</option>
+                >
+                  {{ department.department }}
+                </option>
               </select>
             </div>
 
             <div class="form-group col-3">
-              <select class="form-control form-control-sm" @change="getExamScores">
+              <select
+                class="form-control form-control-sm"
+                @change="getExamScores"
+              >
                 <option value selected>Exams</option>
-                <option v-for="exam in exams" :key="exam.id" :value="exam.id">{{ exam.exam }}</option>
+                <option v-for="exam in exams" :key="exam.id" :value="exam.id">
+                  {{ exam.exam }}
+                </option>
               </select>
             </div>
           </div>
@@ -39,7 +49,7 @@ export default {
       department: null,
       //   courses: [],
       exams: [],
-      examResult: null
+      examResult: null,
     };
   },
   methods: {
@@ -50,28 +60,28 @@ export default {
       //       this.courses = courses.data.data;
       //     })
       //   );
-      axios.get("department").then(res => {
+      axios.get("department").then((res) => {
         this.departments = res.data.data;
       });
     },
     getDeptExams(e) {
       this.department = e.target.value;
-      axios.get(`department_exams/${this.department}`).then(res => {
+      axios.get(`department_exams/${this.department}`).then((res) => {
         this.exams = res.data;
       });
     },
     getExamScores(e) {
       let exam_id = e.target.value;
       if (exam_id) {
-        axios.get(`exam_scores/${this.department}/${exam_id}`).then(res => {
+        axios.get(`exam_scores/${this.department}/${exam_id}`).then((res) => {
           this.examResult = res.data;
         });
       }
-    }
+    },
   },
   created() {
     this.getFilterOptions();
-  }
+  },
 };
 </script>
 
