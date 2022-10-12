@@ -29,7 +29,7 @@
         "moment": "^2.29.4",
         "pdfvuer": "^1.4.0",
         "printd": "^1.4.1",
-        "read-excel-file": "^4.0.4",
+        "read-excel-file": "^5.5.0",
         "startbootstrap-sb-admin-2": "^4.0.6",
         "sweetalert2": "^8.15.2",
         "v-datatable-light": "^0.8.0",
